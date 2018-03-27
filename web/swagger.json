@@ -1,0 +1,426 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "url" : "http://localhost:8001/api/v1"
+  }, {
+    "url" : "http://server.da-14.org:4820/api/v1"
+  } ],
+  "info" : {
+    "version" : "1.0.0-oas3",
+    "title" : "Swagger MSPublisher API"
+  },
+  "tags" : [ {
+    "name" : "Registration",
+    "description" : ""
+  }, {
+    "name" : "Teacher login",
+    "description" : "Teacher login"
+  }, {
+    "name" : "Forgot password",
+    "description" : "Forgot password"
+  }, {
+    "name" : "Account",
+    "description" : "Account routes"
+  } ],
+  "paths" : {
+    "/registration" : {
+      "post" : {
+        "tags" : [ "Registration" ],
+        "summary" : "SignUp a new user",
+        "operationId" : "registerUser",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RegistrationRequest"
+              }
+            }
+          },
+          "description" : "Registration object",
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Entity is created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "422" : {
+            "description" : "Faild validation"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/login" : {
+      "post" : {
+        "tags" : [ "Teacher login" ],
+        "summary" : "",
+        "operationId" : "teacherLogin",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TeacherLoginRequest"
+              }
+            }
+          },
+          "description" : "Login data",
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Entity is created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "422" : {
+            "description" : "Faild validation"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/forgot-password" : {
+      "post" : {
+        "tags" : [ "Forgot password" ],
+        "summary" : "",
+        "operationId" : "forgotPassword",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          },
+          "description" : "Forgot password data",
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Entity is created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "422" : {
+            "description" : "Faild validation"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "Forgot password" ],
+        "summary" : "",
+        "operationId" : "patchForgotPassword",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PatchForgotPasswordRequest"
+              }
+            }
+          },
+          "description" : "Forgot password data",
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Password is updated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "422" : {
+            "description" : "Faild validation"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    },
+    "/account" : {
+      "get" : {
+        "tags" : [ "Account" ],
+        "summary" : "Get authenticated user",
+        "operationId" : "getAccount",
+        "security" : [ {
+          "mspSecurity" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "Account" ],
+        "summary" : "",
+        "operationId" : "patchAccount",
+        "security" : [ {
+          "mspSecurity" : [ ]
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PatchAccountRequest"
+              }
+            }
+          },
+          "description" : "Patch account data",
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Account is updated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "422" : {
+            "description" : "Faild validation"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "RegistrationRequest" : {
+        "type" : "object",
+        "required" : [ "email", "firstName", "lastName", "password" ],
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "example" : "test@gmail.com"
+          },
+          "firstName" : {
+            "type" : "string",
+            "example" : "test first name"
+          },
+          "lastName" : {
+            "type" : "string",
+            "example" : "test last name"
+          },
+          "password" : {
+            "type" : "string",
+            "example" : "1234"
+          }
+        }
+      },
+      "TeacherLoginRequest" : {
+        "type" : "object",
+        "required" : [ "login", "password" ],
+        "properties" : {
+          "login" : {
+            "type" : "string",
+            "example" : "teacher@gmail.com"
+          },
+          "password" : {
+            "type" : "string",
+            "example" : "1234"
+          },
+          "userType" : {
+            "type" : "string",
+            "example" : "teacher"
+          }
+        }
+      },
+      "StudentLoginRequest" : {
+        "type" : "object",
+        "required" : [ "login", "password" ],
+        "properties" : {
+          "login" : {
+            "type" : "string",
+            "example" : "student@gmail.com"
+          },
+          "password" : {
+            "type" : "string",
+            "example" : "1234"
+          },
+          "userType" : {
+            "type" : "string",
+            "example" : "student"
+          }
+        }
+      },
+      "ForgotPasswordRequest" : {
+        "type" : "object",
+        "required" : [ "email" ],
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "example" : "test@gmail.com"
+          }
+        }
+      },
+      "PatchForgotPasswordRequest" : {
+        "type" : "object",
+        "required" : [ "token" ],
+        "properties" : {
+          "token" : {
+            "type" : "string",
+            "example" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJ0ZWFjaGVyQGdtYWlsLmNvbSIsInJvbGUiOiJ0ZWFjaGVyIiwiZmlyc3ROYW1lIjoiVGVhY2hlciIsImxhc3ROYW1lIjoiTGFzdCBuYW1lIiwiZGVzY3JpcHRpb24iOm51bGwsImlhdCI6MTUxODk1NTI3M30.R7-jnh5lkQpiCjBmnke1NTfzs_onyoVTRu1zjr2E0XQ"
+          },
+          "password" : {
+            "type" : "string",
+            "example" : "1234abCD"
+          }
+        }
+      },
+      "PatchAccountRequest" : {
+        "type" : "object",
+        "properties" : {
+          "firstName" : {
+            "type" : "string",
+            "example" : "test first name"
+          },
+          "lastName" : {
+            "type" : "string",
+            "example" : "test"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AuthResponse" : {
+        "type" : "object",
+        "properties" : {
+          "token" : {
+            "type" : "string",
+            "example" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJ0ZWFjaGVyQGdtYWlsLmNvbSIsInJvbGUiOiJ0ZWFjaGVyIiwiZmlyc3ROYW1lIjoiVGVhY2hlciIsImxhc3ROYW1lIjoiTGFzdCBuYW1lIiwiZGVzY3JpcHRpb24iOm51bGwsImlhdCI6MTUxODk1NTI3M30.R7-jnh5lkQpiCjBmnke1NTfzs_onyoVTRu1zjr2E0XQ"
+          },
+          "user" : {
+            "$ref" : "#/components/schemas/UserResponse"
+          }
+        }
+      },
+      "UserResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1
+          },
+          "firstName" : {
+            "type" : "string",
+            "example" : "test first name"
+          },
+          "lastName" : {
+            "type" : "string",
+            "example" : "test last name"
+          },
+          "userName" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string",
+            "example" : "test@gmail.com"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "description"
+          },
+          "role" : {
+            "type" : "string",
+            "description" : "User role",
+            "example" : "teacher",
+            "enum" : [ "teacher", "admin", "student" ]
+          }
+        }
+      },
+      "SuccessResponse" : {
+        "type" : "object",
+        "properties" : {
+          "success" : {
+            "type" : "boolean",
+            "example" : true
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "mspSecurity" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}

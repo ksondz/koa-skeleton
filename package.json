@@ -1,0 +1,81 @@
+{
+  "name": "koa-publisher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "./node_modules/pm2/bin/pm2 start ./ecosystem.config.js",
+    "stop": "./node_modules/pm2/bin/pm2 stop 0 && ./node_modules/pm2/bin/pm2 delete 0",
+    "logs": "./node_modules/pm2/bin/pm2 logs 0",
+    "lint": "./node_modules/.bin/eslint  . *.js",
+    "lint-fix": "./node_modules/.bin/eslint --fix  . *.js",
+    "test": "APP_ENV=test ./node_modules/mocha/bin/mocha",
+    "check:security": "./node_modules/nsp/bin/nsp check",
+    "db:migrate": "sequelize db:migrate",
+    "db:migrate:undo": "sequelize db:migrate:undo",
+    "db:migrate:undo:all": "sequelize db:migrate:undo:all",
+    "db:migration:create": "sequelize migration:create --name unnamed-migration",
+    "db:seed": "sequelize db:seed:all",
+    "db:seed:undo": "sequelize db:seed:undo",
+    "db:seed:undo:all": "sequelize db:seed:undo:all",
+    "db:seed:create": "sequelize seed:generate --name unnamed-seed",
+    "headless:start": "pm2 start google-chrome --interpreter none -- --headless --disable-gpu --disable-translate --disable-extensions --disable-background-networking --safebrowsing-disable-auto-update --disable-sync --metrics-recording-only --disable-default-apps --no-first-run --mute-audio --hide-scrollbars --remote-debugging-port=9222"
+  },
+  "config": {
+    "ghooks": {
+      "pre-push": "npm run check:security",
+      "pre-commit": "npm run lint"
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ajv": "^6.0.1",
+    "ajv-errors": "^1.0.0",
+    "aws-sdk": "^2.191.0",
+    "bcrypt": "^1.0.3",
+    "crypto": "^1.0.1",
+    "deepmerge": "^2.0.1",
+    "hoek": "^5.0.3",
+    "html-pdf-chrome": "^0.5.0",
+    "joi": "^13.1.2",
+    "jsonwebtoken": "^8.1.1",
+    "koa": "^2.4.1",
+    "koa-bodyparser": "^4.2.0",
+    "koa-compose": "^4.0.0",
+    "koa-cors": "^0.0.16",
+    "koa-multer": "^1.0.2",
+    "koa-passport": "^4.0.1",
+    "koa-roles": "^2.0.0",
+    "koa-router": "^7.3.0",
+    "koa-static-server": "^1.3.3",
+    "koa2-swagger-ui": "^2.6.12",
+    "mime": "^2.2.0",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.20.1",
+    "node-exiftool": "^2.3.0",
+    "nodemailer": "^4.4.2",
+    "passport-github": "^1.1.0",
+    "path": "^0.12.7",
+    "pdf-image": "^1.0.5",
+    "pg": "^7.4.0",
+    "sequelize": "^4.28.6",
+    "sequelize-cli": "^3.2.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.5.1",
+    "ghooks": "^2.0.2",
+    "mocha": "^3.5.3",
+    "nsp": "^3.1.0",
+    "pm2": "^2.9.3"
+  }
+}
