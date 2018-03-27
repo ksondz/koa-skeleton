@@ -12,7 +12,6 @@
     "logs": "./node_modules/pm2/bin/pm2 logs 0",
     "lint": "./node_modules/.bin/eslint  . *.js",
     "lint-fix": "./node_modules/.bin/eslint --fix  . *.js",
-    "test": "APP_ENV=test ./node_modules/mocha/bin/mocha",
     "check:security": "./node_modules/nsp/bin/nsp check",
     "db:migrate": "sequelize db:migrate",
     "db:migrate:undo": "sequelize db:migrate:undo",
@@ -21,8 +20,7 @@
     "db:seed": "sequelize db:seed:all",
     "db:seed:undo": "sequelize db:seed:undo",
     "db:seed:undo:all": "sequelize db:seed:undo:all",
-    "db:seed:create": "sequelize seed:generate --name unnamed-seed",
-    "headless:start": "pm2 start google-chrome --interpreter none -- --headless --disable-gpu --disable-translate --disable-extensions --disable-background-networking --safebrowsing-disable-auto-update --disable-sync --metrics-recording-only --disable-default-apps --no-first-run --mute-audio --hide-scrollbars --remote-debugging-port=9222"
+    "db:seed:create": "sequelize seed:generate --name unnamed-seed"
   },
   "config": {
     "ghooks": {

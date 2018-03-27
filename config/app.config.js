@@ -1,23 +1,19 @@
 // config/app.config.js
 
-if (!process.env.APP_ENV) {
-  Object.assign(process.env, require('./../env/env'));
-}
-
-const env = process.env.APP_ENV || 'development';
+const EnvironmentService = require('./../module/appExtension/service/EnvironmentService');
 
 /**
  * Set environment
  *
  * @type {string | undefined | string}
  */
-module.exports.env = env;
+module.exports.env = EnvironmentService.getEnvironment();
 
 
 /**
  * Inject db config
  */
-module.exports.db = require('./db.config')[env];
+module.exports.db = require('./sequelize.db.config')[EnvironmentService.getEnvironment()];
 
 
 /**
@@ -63,7 +59,3 @@ module.exports.router = {
  * @type {string}
  */
 module.exports.modulePath = `${__dirname}/../module`;
-
-module.exports.headLess = {
-  port: process.env.HEADLESS_PORT,
-};

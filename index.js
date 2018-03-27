@@ -23,10 +23,6 @@ const staticServer = require('koa-static-server');
   const ServiceManager = appExtension.getServiceManager();
 
   const ModelService = ServiceManager.get('ModelService');
-  const ErrorService = ServiceManager.get('ErrorService');
-  const RouterService = ServiceManager.get('RouterService');
-  const OAuthService = ServiceManager.get('OAuthService');
-
   await ModelService.getSequelize().sync();
 
   app.use(cors({
@@ -38,10 +34,13 @@ const staticServer = require('koa-static-server');
     strict: true,
   }));
 
+  const ErrorService = ServiceManager.get('ErrorService');
   app.use(ErrorService.handle);
 
+  const OAuthService = ServiceManager.get('OAuthService');
   app.use(OAuthService.authorization);
 
+  const RouterService = ServiceManager.get('RouterService');
   await RouterService.initRoutes();
   app.use(RouterService.getRouter().routes());
 

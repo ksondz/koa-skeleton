@@ -1,12 +1,12 @@
-// auth/Validator/LoginValidator.js
+// auth/Validator/OAuthValidator.js
 
 const BaseValidator = require('../../appExtension/validator/BaseValidator');
 
-const UserRoleEnum = require('./../../user/enum/UserRoleEnum');
 const UserStateEnum = require('./../../user/enum/UserStateEnum');
+const AuthController = require('./../controller/AuthController');
 
 
-class LoginValidator extends BaseValidator {
+class OAuthValidator extends BaseValidator {
 
 
   static get INVALID_LOGIN_KEY() {
@@ -17,8 +17,12 @@ class LoginValidator extends BaseValidator {
     return 'Invalid login and password combination';
   }
 
-  static get ACCOUNT_NOT_ACTIVATED() {
-    return 'Account not activated';
+  static get USER_IS_NOT_FOUND() {
+    return 'User with current username is not found';
+  }
+
+  static get USER_IS_BLOCKED() {
+    return 'User with current username is blocked';
   }
 
 
@@ -26,12 +30,14 @@ class LoginValidator extends BaseValidator {
    * @param errorService
    * @param modelService
    * @param cryptoService
+   * @param oauthService
    */
-  constructor(errorService, modelService, cryptoService) {
+  constructor(errorService, modelService, cryptoService, oauthService) {
     super(errorService);
 
     this.modelService = modelService;
     this.cryptoService = cryptoService;
+    this.oauthService = oauthService;
   }
 
   /**
@@ -41,16 +47,17 @@ class LoginValidator extends BaseValidator {
 
     const joiBuilder = this.getJoiBuilder();
 
-    const loginCondition = {
-      is: UserRoleEnum.TEACHER_USER_ROLE,
-      then: joiBuilder.string().email().required(),
-      otherwise: joiBuilder.string().min(2).max(64).required(),
-    };
-
     return joiBuilder.object().keys({
-      login: joiBuilder.alternatives().when('userType', loginCondition).required(),
-      password: joiBuilder.string().min(4).max(15).required(),
-      userType: joiBuilder.string().only([UserRoleEnum.TEACHER_USER_ROLE, UserRoleEnum.STUDENT_USER_ROLE]).required(),
+      username: joiBuilder.alternatives().when('type', {
+        is: AuthController.OAUTH_REFRESH_TOKEN_TYPE, then: joiBuilder.string(), otherwise: joiBuilder.string().required(),
+      }).required(),
+      password: joiBuilder.alternatives().when('type', {
+        is: AuthController.OAUTH_REFRESH_TOKEN_TYPE, then: joiBuilder.string(), otherwise: joiBuilder.string().min(4).max(15).required(),
+      }).required(),
+      refreshToken: joiBuilder.alternatives().when('type', {
+        is: AuthController.OAUTH_REFRESH_TOKEN_TYPE, then: joiBuilder.string().required(), otherwise: joiBuilder.string(),
+      }).required(),
+      type: joiBuilder.string(),
     });
   }
 
@@ -62,50 +69,48 @@ class LoginValidator extends BaseValidator {
 
     const validateData = await super.validate(data);
 
-    const user = await this.findTeacherOrStudent(validateData.userType, validateData.login);
+    if (validateData.type === AuthController.OAUTH_REFRESH_TOKEN_TYPE) {
 
-    if (!user || !await this.passwordIsVeryfied(validateData.password, user.password)) {
+      await this.getOAuthService().validateRefreshToken(validateData.refreshToken);
 
-      const errorMessages = {};
-      errorMessages[LoginValidator.INVALID_LOGIN_KEY] = LoginValidator.INVALID_LOGIN_TEMPLATE;
+    } else {
 
-      throw this.getErrorService().createValidationError(errorMessages);
-    }
-
-    if (user.state === UserStateEnum.BLOCKED_USER_STATE) {
-      throw this.getErrorService().createValidationError(LoginValidator.ACCOUNT_NOT_ACTIVATED);
+      await this.validateUserNameAndPassword(validateData.username, validateData.password);
     }
 
     return validateData;
   }
 
+
   /**
-   * @param userType
-   * @param login
-   * @return {Promise<*>}
+   * @param username
+   * @param password
+   * @return {Promise<void>}
    */
-  async findTeacherOrStudent(userType, login) {
+  async validateUserNameAndPassword(username, password) {
 
-    let user;
+    const user = await this.getUserRepository().findByEmail(username);
 
-    if (userType === UserRoleEnum.TEACHER_USER_ROLE) {
-      user = await this.getUserRepository().findTeacherByEmail(login);
-    } else {
-      user = await this.getUserRepository().findStudentByUserName(login);
+    if (!user) {
+      throw this.getErrorService().createValidationError(OAuthValidator.USER_IS_NOT_FOUND);
     }
 
-    return user;
+    const passwordIsVerified = await await this.getCryptoService().verifyHash(password, user.password);
+
+    if (!passwordIsVerified) {
+
+      const errorMessages = {
+        [OAuthValidator.INVALID_LOGIN_KEY]: OAuthValidator.INVALID_LOGIN_TEMPLATE
+      };
+
+      throw this.getErrorService().createValidationError(errorMessages);
+    }
+
+    if (user.state === UserStateEnum.BLOCKED_USER_STATE) {
+      throw this.getErrorService().createValidationError(OAuthValidator.USER_IS_BLOCKED);
+    }
   }
 
-  /**
-   * @param password
-   * @param userPassword
-   * @return {Promise<*|boolean>}
-   */
-  async passwordIsVeryfied(password, userPassword) {
-    const isVerified = await this.getCryptoService().verifyHash(password, userPassword);
-    return isVerified || false;
-  }
 
   /**
    * @return {Request<CodeCommit.GetRepositoryOutput, AWSError>}
@@ -113,6 +118,7 @@ class LoginValidator extends BaseValidator {
   getUserRepository() {
     return this.getModelService().get('User').getRepository();
   }
+
 
   /**
    * @return {*}
@@ -127,6 +133,13 @@ class LoginValidator extends BaseValidator {
   getCryptoService() {
     return this.cryptoService;
   }
+
+  /**
+   * @return {*}
+   */
+  getOAuthService() {
+    return this.oauthService;
+  }
 }
 
-module.exports = LoginValidator;
+module.exports = OAuthValidator;

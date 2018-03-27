@@ -30,7 +30,7 @@ class AccessTokenRepository extends BaseRepository {
     const result = await super.findAll({
       where: {
         user_id: userId,
-        type: TokenTypeEnum.ACCESS_TOKEN_TYPE,
+        type: TokenTypeEnum.ACCESS_TYPE,
       },
     });
 
@@ -46,7 +46,23 @@ class AccessTokenRepository extends BaseRepository {
     const result = await super.findOne({
       where: {
         token,
-        type: TokenTypeEnum.ACCESS_TOKEN_TYPE,
+        type: TokenTypeEnum.ACCESS_TYPE,
+      },
+    });
+
+    return result || null;
+  }
+
+  /**
+   * @param token
+   * @return {Promise<*>}
+   */
+  async findRefreshToken(token) {
+
+    const result = await super.findOne({
+      where: {
+        token,
+        type: TokenTypeEnum.REFRESH_TYPE,
       },
     });
 

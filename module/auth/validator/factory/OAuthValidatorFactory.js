@@ -1,16 +1,16 @@
-// auth/validator/factory/LoginValidatorFactory.js
+// auth/validator/factory/OAuthValidatorFactory.js
 
 const FactoryInterface = require('../../../appExtension/factory/FactoryInterface');
 
-const LoginValidator = require('./../LoginValidator');
+const OAuthValidator = require('./../OAuthValidator');
 
 
-class LoginValidatorFactory extends FactoryInterface {
+class OAuthValidatorFactory extends FactoryInterface {
 
 
   /**
    * @param app
-   * @return {LoginValidator}
+   * @return {OAuthValidator}
    */
   constructor(app) {
 
@@ -20,8 +20,8 @@ class LoginValidatorFactory extends FactoryInterface {
     const modelService = this.getServiceManager().get('ModelService');
     const cryptoService = this.getServiceManager().get('CryptoService');
 
-    return new LoginValidator(errorService, modelService, cryptoService);
+    return new OAuthValidator(errorService, modelService, cryptoService);
   }
 }
 
-module.exports = LoginValidatorFactory;
+module.exports = OAuthValidatorFactory;

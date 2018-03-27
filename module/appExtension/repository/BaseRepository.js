@@ -35,10 +35,21 @@ class BaseRepository {
 
 
   /**
+   * @param data
+   * @returns {Promise<Model|null>}
+   */
+  async find(data) {
+    const result = await this.__getModel().find(data);
+
+    return result || null;
+  }
+
+
+  /**
    * @param id
    * @returns {Promise<Model|null>}
    */
-  async find(id) {
+  async findById(id) {
     const result = await this.__getModel().findById(id);
 
     return result || null;
@@ -63,7 +74,7 @@ class BaseRepository {
    * @returns {Promise<{}|*>}
    */
   async update(id, data) {
-    let resource = await this.find(id);
+    let resource = await this.findById(id);
 
     resource = await resource.update(data);
 

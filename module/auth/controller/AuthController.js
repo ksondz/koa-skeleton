@@ -1,4 +1,4 @@
-// auth/controllers/OAuthController.js
+// auth/controllers/AuthController.js
 
 const AbstractController = require('./../../appExtension/controller/AbstractController');
 const TokenTypeEnum = require('./../enum/TokenTypeEnum');
@@ -6,6 +6,11 @@ const UserStateEnum = require('./../../user/enum/UserStateEnum');
 
 
 class AuthController extends AbstractController {
+
+
+  static get OAUTH_REFRESH_TOKEN_TYPE() {
+    return 'refreshToken';
+  }
 
 
   /**
@@ -31,7 +36,7 @@ class AuthController extends AbstractController {
    */
   getActions() {
     return {
-      login: this.loginAction.bind(this),
+      oauth: this.oauthAction.bind(this),
       logout: this.logoutAction.bind(this),
       registration: this.registrationAction.bind(this),
       forgotPassword: this.forgotPasswordAction.bind(this),
@@ -45,31 +50,41 @@ class AuthController extends AbstractController {
    * @param next
    * @return {Promise<void>}
    */
-  async loginAction(ctx, next) {
+  async oauthAction(ctx, next) {
 
-    const requestParams = ctx.request.body;
+    const OAuthValidator = this.getValidatorService().get('OAuthValidator');
 
-    const LoginValidator = this.getValidatorService().get('LoginValidator');
+    const validatedData = await OAuthValidator.validate(ctx.request.body);
 
-    const validateData = await LoginValidator.validate(requestParams);
+    let user;
 
-    const user = await this.getUserRepository().findUserByEmailOrUserName(validateData.login);
+    if (validatedData.type === AuthController.OAUTH_REFRESH_TOKEN_TYPE) {
+
+      const refreshToken = await this.getAccessTokenRepository().findRefreshToken(validatedData.refreshToken);
+      await refreshToken.destroy();
+
+      user = await this.getUserRepository().findById(refreshToken.userId);
+    } else {
+      user = await this.getUserRepository().findByEmail(validatedData.username);
+    }
 
     const userTokens = await this.getAccessTokenRepository().findUserAccessTokens(user.id);
     await userTokens.forEach(async (userToken) => {
+      // TODO: move this condition inside AccessToken model
       if (userToken.createdAt < new Date(Date.now() - 7200000000)) {
         await userToken.destroy();
       }
     });
 
+    // TODO: move it inside AccessToken model. We can use factory method for this type
     const newAccessToken = await this.getAccessTokenRepository().create({
       userId: user.id,
       token: this.oauthService.generateToken(user),
-      type: TokenTypeEnum.ACCESS_TOKEN_TYPE,
+      type: TokenTypeEnum.ACCESS_TYPE,
       expDate: this.moment().add(100, 'days').format(),
     });
 
-    const userResponse = await this.getUserModel().extractor.extractWithExtraProperties(user);
+    const userResponse = await this.getUserModel().extractor.extract(user);
 
     ctx.body = {
       token: newAccessToken.token,
@@ -95,7 +110,7 @@ class AuthController extends AbstractController {
 
     const accessToken = await this._generateAccessToken(user.id);
 
-    await this.sendRegisterToken(process.env.APP_CLIENT_URL, user, accessToken);
+    await this.sendRegisterToken(process.env.MAIL_CLIENT_LINKS_URL, user, accessToken);
 
     ctx.body = {
       success: true,
@@ -122,7 +137,7 @@ class AuthController extends AbstractController {
       forgotToken,
     });
 
-    await this.sendResetPasswordEmail(process.env.APP_CLIENT_URL, teacher.email, forgotToken);
+    await this.sendResetPasswordEmail(process.env.MAIL_CLIENT_LINKS_URL, teacher.email, forgotToken);
 
     ctx.body = {
       success: true,

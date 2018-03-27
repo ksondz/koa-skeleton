@@ -1,4 +1,4 @@
-// config/db.config.js
+// config/sequelize.db.config.js
 
 const EnvironmentService = require('./../module/appExtension/service/EnvironmentService');
 

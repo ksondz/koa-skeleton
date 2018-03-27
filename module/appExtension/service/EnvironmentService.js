@@ -1,133 +1,80 @@
-// error/service/ErrorService.js
+// appExtension/service/EnvironmentService.js
 
-const BaseError = require('../type/BaseError');
-
-const ServerError = require('../type/ServerError');
-const BadRequestError = require('../type/BadRequestError');
-const ForbiddenError = require('../type/ForbiddenError');
-const MethodNotAllowedError = require('../type/MethodNotAllowedError');
-const NotAuthorizedError = require('../type/NotAuthorizedError');
-const NotFoundError = require('../type/NotFoundError');
-const ValidationError = require('../type/ValidationError');
+const appEnv = require('./../../../env/env');
 
 
-class ErrorService {
+class EnvironmentService {
 
 
-  /**
-   * @param app
-   */
-  constructor(app) {
-    this.app = app;
-    this.status = {
-      badRequest: BaseError.BAD_REQUEST_STATUS,
-      forbidden: BaseError.FORBIDDEN_STATUS,
-      methodNotAllowed: BaseError.METHOD_NOT_ALLOWED_STATUS,
-      unauthorized: BaseError.UNAUTHORIZED_STATUS,
-      notFound: BaseError.NOT_FOUND_STATUS,
-      validation: BaseError.VALIDATION_STATUS,
-    };
+  static get PRODUCTION_ENV() {
+    return 'production';
+  }
 
-    /**
-     * @type {any}
-     */
-    this.handle = this.handleError.bind(this);
+  static get DEVELOPMENT_ENV() {
+    return 'development';
+  }
+
+  static get TEST_ENV() {
+    return 'test';
+  }
+
+  static get ALLOWED_ENV_ARRAY() {
+    return [
+      EnvironmentService.PRODUCTION_ENV,
+      EnvironmentService.DEVELOPMENT_ENV,
+      EnvironmentService.TEST_ENV,
+    ];
   }
 
   /**
-   * @param ctx
-   * @param next
-   * @return {Promise<void>}
+   * @return {string}
    */
-  async handleError(ctx, next) {
+  static getEnvironment() {
+    return process.env.APP_ENV;
+  }
 
-    try {
-      await next();
-    } catch (err) {
 
-      switch (true) {
-        case (err instanceof ValidationError):
-        case (err instanceof NotAuthorizedError):
-        case (err instanceof ForbiddenError):
-        case (err instanceof BadRequestError):
-        case (err instanceof MethodNotAllowedError):
-        case (err instanceof ServerError):
-          ctx.status = err.getStatus();
-          ctx.body = err.getMessage();
-          break;
-        default:
-          ctx.status = BaseError.SERVER_STATUS;
-          ctx.body = {
-            message: err.message || 'Internal server error',
-          };
+  /**
+   * @return {string}
+   */
+  static defineEnvironment() {
+    if (!EnvironmentService.isEnvironmentDefined()) {
+      Object.assign(process.env, appEnv);
 
-          this.app.emit('error', err, ctx);
-
-          break;
+      if (EnvironmentService.ALLOWED_ENV_ARRAY.indexOf(process.env.APP_ENV) === -1) {
+        process.env.APP_ENV = EnvironmentService.DEVELOPMENT_ENV;
       }
-
     }
+
+    return process.env.APP_ENV
   }
 
   /**
-   * @param message
-   * @param status
-   * @return {*}
+   * @return {string}
    */
-  createError(message, status) {
-
-    message = { message };
-
-    switch (status) {
-      case (this.status.badRequest):
-        return new BadRequestError(message);
-      case (this.status.forbidden):
-        return new ForbiddenError(message);
-      case (this.status.methodNotAllowed):
-        return new MethodNotAllowedError(message);
-      case (this.status.unauthorized):
-        return new NotAuthorizedError(message);
-      case (this.status.notFound):
-        return new NotFoundError(message);
-      case (this.status.validation):
-        return new ValidationError(message);
-      default:
-        return new ServerError(message);
-    }
-  }
-
-
-  /**
-   * @param message
-   * @returns {*}
-   */
-  createServerError(message) {
-    return this.createError(message);
+  static isEnvironmentDefined() {
+    return (process.env.APP_ENV);
   }
 
   /**
-   * @param message
-   * @return {ValidationError}
+   * @return {boolean}
    */
-  createValidationError(message) {
-    return this.createError(message, this.status.validation);
+  static isDevelopment() {
+    return EnvironmentService.getEnvironment() === EnvironmentService.DEVELOPMENT_ENV;
   }
 
   /**
-   * @param message
-   * @returns {NotAuthorizedError}
+   * @return {boolean}
    */
-  createNotAuthorizedError(message) {
-    return this.createError(message, this.status.unauthorized);
+  static isProduction() {
+    return EnvironmentService.getEnvironment() === EnvironmentService.PRODUCTION_ENV;
   }
 
-  /**
-   * @param message
-   * @returns {NotAuthorizedError}
-   */
-  createForbiddenError(message) {
-    return this.createError(message, this.status.forbidden);
-  }
 }
 
-module.exports = ErrorService;
+
+if (!EnvironmentService.isEnvironmentDefined()) {
+  EnvironmentService.defineEnvironment();
+}
+
+module.exports = EnvironmentService;

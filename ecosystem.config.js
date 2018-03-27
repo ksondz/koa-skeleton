@@ -1,12 +1,7 @@
 
-const appEnv = require('./env/env');
+const EnvironmentService = require('./module/appExtension/service/EnvironmentService');
 
-let pm2Name = 'msp-prod';
-
-if (appEnv.APP_ENV !== 'production') {
-
-  pm2Name = 'msp-dev';
-}
+const pm2Name = EnvironmentService.isProduction() ? 'koa-app-prod' : 'koa-app-dev';
 
 module.exports = {
   apps: [
@@ -28,7 +23,7 @@ module.exports = {
       node_args: '',
       merge_logs: true,
       cwd: './',
-      env: appEnv,
+      env: EnvironmentService.getEnvironment(),
     },
   ],
 };

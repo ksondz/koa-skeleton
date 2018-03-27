@@ -33,9 +33,9 @@ module.exports = (sequelize, DataTypes) => {
       field: 'token',
       allowNull: true,
     },
-    expDate: {
+    expiredAt: {
       type: DataTypes.DATE,
-      field: 'exp_date',
+      field: 'expired_at',
       allowNull: true,
     },
     createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'created_at', allowNull: false },
@@ -66,6 +66,11 @@ module.exports = (sequelize, DataTypes) => {
 
   AccessToken.repository = AccessTokenRepository;
   AccessToken.extractProperties = extractProperties;
+
+
+  User.isExpired = () => {
+    return this.expiredAt >
+  };
 
   return AccessToken;
 };

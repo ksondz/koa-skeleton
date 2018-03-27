@@ -39,7 +39,7 @@ class OAuthService {
 
     const authorizationHeader = ctx.headers.authorization;
 
-    ctx.state.role = UserRoleEnum.GUEST_USER_ROLE;
+    ctx.state.role = UserRoleEnum.GUEST_ROLE;
 
     if (authorizationHeader) {
 
@@ -57,7 +57,7 @@ class OAuthService {
         throw this.getErrorService().createNotAuthorizedError('Not found token');
       }
 
-      const user = await this.getUserRepository().find(accessToken.userId);
+      const user = await this.getUserRepository().findById(accessToken.userId);
 
       if (!user) {
         throw this.getErrorService().createNotAuthorizedError('User is not found');
@@ -69,6 +69,29 @@ class OAuthService {
     }
 
     await next();
+  }
+
+
+  /**
+   * @param token
+   * @return {Promise<boolean>}
+   */
+  async validateRefreshToken(token) {
+
+    const refreshToken = await this.getAccessTokenRepository().findRefreshToken(token);
+
+    switch (true) {
+      case (!refreshToken):
+        throw this.getErrorService().createNotAuthorizedError('Refresh token is not found');
+        //TODO: move condition inside AccessToken model
+      case (refreshToken.expiredAt < (Date.now())):
+        await this.getAccessTokenRepository().destroyById(refreshToken.id);
+
+        throw this.getErrorService().createNotAuthorizedError('Refresh token is expired');
+
+      default:
+        return true;
+    }
   }
 
 

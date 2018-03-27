@@ -62,11 +62,11 @@ class AccountController extends AbstractController {
     const newToken = await this.getAccessTokenRepository().create({
       userId: userModel.id,
       token: this.oauthService.generateToken(userModel),
-      type: TokenTypeEnum.ACCESS_TOKEN_TYPE,
+      type: TokenTypeEnum.ACCESS_TYPE,
       expDate: moment().add(100, 'days').format(),
     });
 
-    const userResponse = await this.getUserExtractor().extractWithExtraProperties(userModel);
+    const userResponse = await this.getUserExtractor().extract(userModel);
 
     ctx.body = {
       user: userResponse,
@@ -91,7 +91,7 @@ class AccountController extends AbstractController {
 
     const updatedUserModel =  await this.getUserRepository().update(state.user.id, accountPatchData);
 
-    ctx.body = await this.getUserExtractor().extractWithExtraProperties(updatedUserModel);
+    ctx.body = await this.getUserExtractor().extract(updatedUserModel);
   }
 
   /**
@@ -103,9 +103,9 @@ class AccountController extends AbstractController {
 
     const { state } = ctx;
 
-    const userModel = await this.getUserRepository().find(state.user.id);
+    const userModel = await this.getUserRepository().findById(state.user.id);
 
-    const userResponse = await this.getUserExtractor().extractWithExtraProperties(userModel);
+    const userResponse = await this.getUserExtractor().extract(userModel);
 
     ctx.body = { user: userResponse };
   }

@@ -17,19 +17,14 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true,
     },
-    parent_id: {
-      type: DataTypes.INTEGER,
-      field: 'parent_id',
-      allowNull: true,
-    },
-    username: {
-      type: DataTypes.STRING,
-      field: 'username',
-      allowNull: true,
-    },
     email: {
       type: DataTypes.STRING,
       field: 'email',
+      allowNull: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      field: 'password',
       allowNull: true,
     },
     firstName: {
@@ -47,21 +42,11 @@ module.exports = (sequelize, DataTypes) => {
       field: 'description',
       allowNull: true,
     },
-    forgotToken: {
-      type: DataTypes.STRING,
-      field: 'forgot_token',
-      allowNull: true,
-    },
     role: {
       type: DataTypes.ENUM,
       values: UserRoleEnum.getValues(),
       field: 'role',
-      defaultValue: UserRoleEnum.TEACHER_USER_ROLE,
-      allowNull: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      field: 'password',
+      defaultValue: UserRoleEnum.USER_ROLE,
       allowNull: true,
     },
     state: {
@@ -71,12 +56,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: UserStateEnum.ACTIVE_USER_STATE,
       allowNull: false,
     },
-    passwordUpdatedAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      field: 'password_updated_at',
-      allowNull: false,
-    },
     createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'created_at', allowNull: false },
     updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'updated_at', allowNull: false },
   };
@@ -84,24 +63,15 @@ module.exports = (sequelize, DataTypes) => {
   const options = {
     tableName,
     timestamps: true,
-    associate: (models) => {
-      const { Image, Templates } = models;
-      User.belongsToMany(Image, { as: 'images', through: 'UserImage', foreignKey: 'user_id' });
-      User.hasMany(Templates, { as: 'templates', foreignKey: 'user_id' });
-      User.hasMany(User, { as: 'ParentUser', foreignKey: 'parent_id' });
-    },
   };
 
   const extractProperties = [
     'id',
     'email',
-    'username',
-    'role',
-    'parent_id',
     'firstName',
     'lastName',
+    'role',
     'description',
-    'passwordUpdatedAt',
   ];
 
 

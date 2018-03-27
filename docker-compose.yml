@@ -9,6 +9,6 @@ services:
     ports:
       - "5433:5432"
     environment:
-      POSTGRES_DB: publisher
-      POSTGRES_USER: msp_user
-      POSTGRES_PASSWORD: msp_password
+      POSTGRES_DB: koa_app_db
+      POSTGRES_USER: koa_app_user
+      POSTGRES_PASSWORD: koa_app_pass
