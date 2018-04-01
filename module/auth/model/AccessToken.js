@@ -68,9 +68,9 @@ module.exports = (sequelize, DataTypes) => {
   AccessToken.extractProperties = extractProperties;
 
 
-  User.isExpired = () => {
-    return this.expiredAt >
-  };
+  // User.isExpired = () => {
+  //   return this.expiredAt >
+  // };
 
   return AccessToken;
 };

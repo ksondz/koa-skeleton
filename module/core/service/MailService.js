@@ -9,6 +9,7 @@ class MailService {
     this.baseApi = baseApi;
 
     this.registerMessage = 'Registration on the MySchoolPublisher';
+    this.forgotPasswordMessage = 'MySchoolPublisher: Password Recovering';
   }
 
 
@@ -43,7 +44,7 @@ class MailService {
     const forgotPasswordHref = `${host}/set-new-password?token=${forgotToken}`;
 
     return {
-      name: 'MySchoolPublisher: Password Recovering',
+      name: this.forgotPasswordMessage,
       html: `
         Hello,<br>
         In order to recover your password on the Myschoolpulbisher.com please follow the <a href="${forgotPasswordHref}">link</a>.<br>

@@ -1,6 +1,6 @@
 // user/enum/BaseEnum.js
 
-const BaseEnum = require('../../appExtension/enum/BaseEnum');
+const BaseEnum = require('../../skeletonExtension/enum/BaseEnum');
 
 
 class UserRoleEnum extends BaseEnum {

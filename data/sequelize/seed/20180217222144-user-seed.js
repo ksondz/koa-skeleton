@@ -6,29 +6,26 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('user', [
       {
-        email: 'teacher@gmail.com',
-        first_name: 'Teacher',
-        last_name: 'Last name',
+        email: 'rick.sanchez@gmail.com',
+        first_name: 'Rick',
+        last_name: 'Sanchez',
         password: '$2a$10$D.Tj/k/oHunzopbux43JfOoaXKDootPFwoutU0Q.mnOyBWdOcmfxu',
         // 1234
         state: userStateEnum.ACTIVE_USER_STATE,
-        role: userRoleEnum.TEACHER_USER_ROLE,
+        role: userRoleEnum.ADMIN_ROLE,
         created_at: Sequelize.literal('CURRENT_TIMESTAMP'),
         updated_at: Sequelize.literal('CURRENT_TIMESTAMP'),
-        password_updated_at: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       {
-        username: 'student1',
-        first_name: 'Student',
-        last_name: 'Last name',
-        // 1234
+        email: 'morty.smith@gmail.com',
+        first_name: 'Morty',
+        last_name: 'Smith',
         password: '$2a$10$D.Tj/k/oHunzopbux43JfOoaXKDootPFwoutU0Q.mnOyBWdOcmfxu',
+        // 1234
         state: userStateEnum.ACTIVE_USER_STATE,
-        role: userRoleEnum.STUDENT_USER_ROLE,
-        parent_id: 1,
+        role: userRoleEnum.USER_ROLE,
         created_at: Sequelize.literal('CURRENT_TIMESTAMP'),
         updated_at: Sequelize.literal('CURRENT_TIMESTAMP'),
-        password_updated_at: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     ], {});
   },

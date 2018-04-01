@@ -1,6 +1,6 @@
 // auth/enum/TokenTypeEnum.js
 
-const BaseEnum = require('../../appExtension/enum/BaseEnum');
+const BaseEnum = require('../../skeletonExtension/enum/BaseEnum');
 
 
 class TokenTypeEnum extends BaseEnum {

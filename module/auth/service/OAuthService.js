@@ -7,6 +7,45 @@ const UserRoleEnum = require('./../../user/enum/UserRoleEnum');
 
 class OAuthService {
 
+  /**
+   * @return {string}
+   * @constructor
+   */
+  static get TOKEN_IS_NOT_FOUNT_MESSAGE() {
+    return 'Token is not found';
+  }
+
+  /**
+   * @return {string}
+   * @constructor
+   */
+  static get USER_IS_NOT_FOUNT_MESSAGE() {
+    return 'User is not found';
+  }
+
+  /**
+   * @return {string}
+   * @constructor
+   */
+  static get REFRESH_TOKEN_IS_NOT_FOUNT_MESSAGE() {
+    return 'Refresh token is not found';
+  }
+
+  /**
+   * @return {string}
+   * @constructor
+   */
+  static get REFRESH_TOKEN_IS_EXPIRED() {
+    return 'Refresh token is expired';
+  }
+
+
+  /**
+   * @param errorService
+   * @param modelService
+   * @param secret
+   * @param options
+   */
   constructor(errorService, modelService, secret, options) {
     this.errorService = errorService;
     this.modelService = modelService;
@@ -54,13 +93,13 @@ class OAuthService {
       const accessToken = await this.getAccessTokenRepository().findAccessToken(authToken);
 
       if (!accessToken) {
-        throw this.getErrorService().createNotAuthorizedError('Not found token');
+        throw this.getErrorService().createNotAuthorizedError(OAuthService.TOKEN_IS_NOT_FOUNT_MESSAGE);
       }
 
       const user = await this.getUserRepository().findById(accessToken.userId);
 
       if (!user) {
-        throw this.getErrorService().createNotAuthorizedError('User is not found');
+        throw this.getErrorService().createNotAuthorizedError(OAuthService.USER_IS_NOT_FOUNT_MESSAGE);
       }
 
       ctx.state.role = user.role;
@@ -82,12 +121,12 @@ class OAuthService {
 
     switch (true) {
       case (!refreshToken):
-        throw this.getErrorService().createNotAuthorizedError('Refresh token is not found');
-        //TODO: move condition inside AccessToken model
+        throw this.getErrorService().createNotAuthorizedError(OAuthService.REFRESH_TOKEN_IS_NOT_FOUNT_MESSAGE);
+        // TODO: move condition inside AccessToken model
       case (refreshToken.expiredAt < (Date.now())):
         await this.getAccessTokenRepository().destroyById(refreshToken.id);
 
-        throw this.getErrorService().createNotAuthorizedError('Refresh token is expired');
+        throw this.getErrorService().createNotAuthorizedError(OAuthService.REFRESH_TOKEN_IS_EXPIRED);
 
       default:
         return true;

@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const saltRounds = 10;
 const encoding = 'hex';
 
-const FactoryInterface = require('./../../../appExtension/factory/FactoryInterface');
+const FactoryInterface = require('../../../skeletonExtension/factory/FactoryInterface');
 
 const CryptoService = require('./../CryptoService');
 

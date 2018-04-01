@@ -46,7 +46,7 @@ class EnvironmentService {
       }
     }
 
-    return process.env.APP_ENV
+    return process.env.APP_ENV;
   }
 
   /**

@@ -1,5 +1,5 @@
 
-const BaseRepository = require('./../../appExtension/repository/BaseRepository');
+const BaseRepository = require('../../skeletonExtension/repository/BaseRepository');
 
 const TokenTypeEnum = require('./../enum/TokenTypeEnum');
 

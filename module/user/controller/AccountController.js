@@ -1,6 +1,6 @@
 // user/controllers/AccountController.js
 
-const AbstractController = require('../../appExtension/controller/AbstractController');
+const AbstractController = require('../../skeletonExtension/controller/AbstractController');
 const UserStateEnum = require('./../../user/enum/UserStateEnum');
 const UserRoleEnum = require('./../../user/enum/UserRoleEnum');
 const TokenTypeEnum = require('./../../auth/enum/TokenTypeEnum');

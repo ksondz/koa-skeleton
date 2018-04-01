@@ -72,6 +72,9 @@ class AppExtension {
   }
 
 
+  /**
+   * @return {ServiceManager}
+   */
   getServiceManager() {
 
     if (!Object.prototype.hasOwnProperty.call(this.getAppContext(), 'getServiceManager')) {

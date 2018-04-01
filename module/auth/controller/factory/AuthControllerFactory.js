@@ -1,7 +1,7 @@
 // auth/controller/factory/RestControllerFactory.js
 
 
-const FactoryInterface = require('./../../../appExtension/factory/FactoryInterface');
+const FactoryInterface = require('../../../skeletonExtension/factory/FactoryInterface');
 
 const AuthController = require('./../AuthController');
 const moment = require('moment');

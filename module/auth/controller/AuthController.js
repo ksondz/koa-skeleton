@@ -1,6 +1,6 @@
 // auth/controllers/AuthController.js
 
-const AbstractController = require('./../../appExtension/controller/AbstractController');
+const AbstractController = require('../../skeletonExtension/controller/AbstractController');
 const TokenTypeEnum = require('./../enum/TokenTypeEnum');
 const UserStateEnum = require('./../../user/enum/UserStateEnum');
 

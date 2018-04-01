@@ -1,14 +1,14 @@
 // error/service/ErrorService.js
 
-const BaseError = require('../type/BaseError');
+const BaseResponse = require('./../response/BaseResponse');
 
-const ServerError = require('../type/ServerError');
-const BadRequestError = require('../type/BadRequestError');
-const ForbiddenError = require('../type/ForbiddenError');
-const MethodNotAllowedError = require('../type/MethodNotAllowedError');
-const NotAuthorizedError = require('../type/NotAuthorizedError');
-const NotFoundError = require('../type/NotFoundError');
-const ValidationError = require('../type/ValidationError');
+const BadRequestResponse = require('./../response/BadRequestResponse');
+const ForbiddenResponse = require('./../response/ForbiddenResponse');
+const MethodNotAllowedResponse = require('./../response/MethodNotAllowedResponse');
+const NotAuthorizedResponse = require('./../response/NotAuthorizedResponse');
+const NotFoundResponse = require('./../response/NotFoundResponse');
+const ServerResponse = require('./../response/ServerResponse');
+const ValidationResponse = require('./../response/ValidationResponse');
 
 
 class ErrorService {
@@ -18,14 +18,16 @@ class ErrorService {
    * @param app
    */
   constructor(app) {
+
     this.app = app;
+
     this.status = {
-      badRequest: BaseError.BAD_REQUEST_STATUS,
-      forbidden: BaseError.FORBIDDEN_STATUS,
-      methodNotAllowed: BaseError.METHOD_NOT_ALLOWED_STATUS,
-      unauthorized: BaseError.UNAUTHORIZED_STATUS,
-      notFound: BaseError.NOT_FOUND_STATUS,
-      validation: BaseError.VALIDATION_STATUS,
+      badRequest: BaseResponse.BAD_REQUEST_STATUS,
+      forbidden: BaseResponse.FORBIDDEN_STATUS,
+      methodNotAllowed: BaseResponse.METHOD_NOT_ALLOWED_STATUS,
+      unauthorized: BaseResponse.UNAUTHORIZED_STATUS,
+      notFound: BaseResponse.NOT_FOUND_STATUS,
+      validation: BaseResponse.VALIDATION_STATUS,
     };
 
     /**
@@ -46,17 +48,17 @@ class ErrorService {
     } catch (err) {
 
       switch (true) {
-        case (err instanceof ValidationError):
-        case (err instanceof NotAuthorizedError):
-        case (err instanceof ForbiddenError):
-        case (err instanceof BadRequestError):
-        case (err instanceof MethodNotAllowedError):
-        case (err instanceof ServerError):
+        case (err instanceof ValidationResponse):
+        case (err instanceof NotAuthorizedResponse):
+        case (err instanceof ForbiddenResponse):
+        case (err instanceof BadRequestResponse):
+        case (err instanceof MethodNotAllowedResponse):
+        case (err instanceof ServerResponse):
           ctx.status = err.getStatus();
           ctx.body = err.getMessage();
           break;
         default:
-          ctx.status = BaseError.SERVER_STATUS;
+          ctx.status = BaseResponse.SERVER_STATUS;
           ctx.body = {
             message: err.message || 'Internal server error',
           };
@@ -69,64 +71,66 @@ class ErrorService {
     }
   }
 
+
   /**
    * @param message
    * @param status
    * @return {*}
+   * @private
    */
-  createError(message, status) {
+  _createErrorResponse(message, status) {
 
     message = { message };
 
     switch (status) {
       case (this.status.badRequest):
-        return new BadRequestError(message);
+        return new BadRequestResponse(message);
       case (this.status.forbidden):
-        return new ForbiddenError(message);
+        return new ForbiddenResponse(message);
       case (this.status.methodNotAllowed):
-        return new MethodNotAllowedError(message);
+        return new MethodNotAllowedResponse(message);
       case (this.status.unauthorized):
-        return new NotAuthorizedError(message);
+        return new NotAuthorizedResponse(message);
       case (this.status.notFound):
-        return new NotFoundError(message);
+        return new NotFoundResponse(message);
       case (this.status.validation):
-        return new ValidationError(message);
+        return new ValidationResponse(message);
       default:
-        return new ServerError(message);
+        return new ServerResponse(message);
     }
   }
 
 
   /**
    * @param message
-   * @returns {*}
+   * @return {ServerResponse}
    */
   createServerError(message) {
-    return this.createError(message);
+    return this._createErrorResponse(message);
   }
 
   /**
    * @param message
-   * @return {ValidationError}
+   * @return {ValidationResponse}
    */
   createValidationError(message) {
-    return this.createError(message, this.status.validation);
+    return this._createErrorResponse(message, this.status.validation);
   }
 
   /**
    * @param message
-   * @returns {NotAuthorizedError}
+   * @returns {NotAuthorizedResponse}
    */
   createNotAuthorizedError(message) {
-    return this.createError(message, this.status.unauthorized);
+    return this._createErrorResponse(message, this.status.unauthorized);
   }
 
   /**
    * @param message
-   * @returns {NotAuthorizedError}
+   * @returns {ForbiddenResponse}
    */
   createForbiddenError(message) {
-    return this.createError(message, this.status.forbidden);
+    return this._createErrorResponse(message, this.status.forbidden);
   }
 }
 

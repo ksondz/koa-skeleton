@@ -1,7 +1,7 @@
 // auth/service/factory/OAuthServiceFactory.js
 
 
-const FactoryInterface = require('./../../../appExtension/factory/FactoryInterface');
+const FactoryInterface = require('../../../skeletonExtension/factory/FactoryInterface');
 
 const OAuthService = require('./../OAuthService');
 

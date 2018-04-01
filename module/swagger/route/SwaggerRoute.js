@@ -1,6 +1,6 @@
 // swagger/route/SwaggerRoute.js
 
-const BaseRoute = require('./../../appExtension/route/BaseRoute');
+const BaseRoute = require('../../skeletonExtension/route/BaseRoute');
 
 
 class SwaggerRoute extends BaseRoute {

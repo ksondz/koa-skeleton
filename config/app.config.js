@@ -1,6 +1,6 @@
 // config/app.config.js
 
-const EnvironmentService = require('./../module/appExtension/service/EnvironmentService');
+const EnvironmentService = require('../module/skeletonExtension/service/EnvironmentService');
 
 /**
  * Set environment

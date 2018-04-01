@@ -1,6 +1,6 @@
 // auth/Validator/OAuthValidator.js
 
-const BaseValidator = require('../../appExtension/validator/BaseValidator');
+const BaseValidator = require('../../skeletonExtension/validator/BaseValidator');
 
 const UserStateEnum = require('./../../user/enum/UserStateEnum');
 const AuthController = require('./../controller/AuthController');
@@ -99,9 +99,7 @@ class OAuthValidator extends BaseValidator {
 
     if (!passwordIsVerified) {
 
-      const errorMessages = {
-        [OAuthValidator.INVALID_LOGIN_KEY]: OAuthValidator.INVALID_LOGIN_TEMPLATE
-      };
+      const errorMessages = { [OAuthValidator.INVALID_LOGIN_KEY]: OAuthValidator.INVALID_LOGIN_TEMPLATE };
 
       throw this.getErrorService().createValidationError(errorMessages);
     }

@@ -1,7 +1,7 @@
 // user/controller/factory/AccountControllerFactory.js
 
 
-const FactoryInterface = require('./../../../appExtension/factory/FactoryInterface');
+const FactoryInterface = require('../../../skeletonExtension/factory/FactoryInterface');
 
 const AccountController = require('./../AccountController');
 

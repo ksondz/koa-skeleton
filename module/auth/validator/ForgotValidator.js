@@ -1,6 +1,6 @@
 // auth/Validator/ForgotValidator.js
 
-const BaseValidator = require('../../appExtension/validator/BaseValidator');
+const BaseValidator = require('../../skeletonExtension/validator/BaseValidator');
 
 
 class ForgotValidator extends BaseValidator {

@@ -1,6 +1,6 @@
 // auth/validator/factory/LoginValidatorFactory.js
 
-const FactoryInterface = require('../../../appExtension/factory/FactoryInterface');
+const FactoryInterface = require('../../../skeletonExtension/factory/FactoryInterface');
 
 const LoginValidator = require('./../LoginValidator');
 

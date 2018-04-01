@@ -1,7 +1,6 @@
-// error/response/BaseError.js
+// error/response/BaseResponse.js
 
-
-class BaseError extends Error {
+class BaseResponse extends Error {
 
   static get SERVER_STATUS() {
     return 500;
@@ -76,4 +75,4 @@ class BaseError extends Error {
   }
 }
 
-module.exports = BaseError;
+module.exports = BaseResponse;

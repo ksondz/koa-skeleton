@@ -1,6 +1,6 @@
 // user/route/AccountRoute.js
 
-const BaseRoute = require('./../../appExtension/route/BaseRoute');
+const BaseRoute = require('../../skeletonExtension/route/BaseRoute');
 
 
 class AccountRoute extends BaseRoute {

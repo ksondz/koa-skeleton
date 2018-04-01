@@ -11,16 +11,6 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
-      parent_id: {
-        type: Sequelize.INTEGER,
-        field: 'parent_id',
-        allowNull: true,
-      },
-      username: {
-        type: Sequelize.STRING,
-        field: 'username',
-        allowNull: true,
-      },
       email: {
         type: Sequelize.STRING,
         field: 'email',
@@ -40,7 +30,7 @@ module.exports = {
         type: Sequelize.ENUM,
         values: UserRoleEnum.getValues(),
         field: 'role',
-        defaultValue: UserRoleEnum.TEACHER_USER_ROLE,
+        defaultValue: UserRoleEnum.USER_ROLE,
         allowNull: true,
       },
       description: {
@@ -58,17 +48,6 @@ module.exports = {
         values: UserStateEnum.getValues(),
         field: 'state',
         defaultValue: UserStateEnum.BLOCKED_USER_STATE,
-        allowNull: false,
-      },
-      forgotToken: {
-        type: Sequelize.STRING,
-        field: 'forgot_token',
-        allowNull: true,
-      },
-      passwordUpdatedAt: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-        field: 'password_updated_at',
         allowNull: false,
       },
       createdAt: {

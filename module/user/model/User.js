@@ -1,6 +1,5 @@
 
 const UserRepository = require('./../repository/UserRepository');
-const UserExtractor = require('./../extractor/UserExtractor');
 
 const UserRoleEnum = require('./../enum/UserRoleEnum');
 const UserStateEnum = require('./../enum/UserStateEnum');
@@ -78,7 +77,7 @@ module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(modelName, schema, options);
 
   User.repository = UserRepository;
-  User.extractor = UserExtractor;
+
   User.extractProperties = extractProperties;
 
   return User;
