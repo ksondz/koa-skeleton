@@ -2,9 +2,9 @@
 
 const nodemailer = require('nodemailer');
 
-const FactoryInterface = require('../../../skeletonExtension/factory/FactoryInterface');
+const FactoryInterface = require('../../factory/FactoryInterface');
 
-const MailService = require('./../MailService');
+const MailService = require('../MailService');
 
 
 class MailServiceFactory extends FactoryInterface {
