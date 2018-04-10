@@ -13,7 +13,7 @@ class AuthRoute extends BaseRoute {
     const authController = this.getControllerService().get('AuthController');
     const controllerActions = authController.getActions();
 
-    router.post(`${baseApiPath}/signin`, controllerActions.signIn);
+    router.post(`${baseApiPath}/auth`, controllerActions.auth);
     router.get(`${baseApiPath}/logout`, this.getRoleResolverService().isAuthorized, controllerActions.logout);
     router.post(`${baseApiPath}/signup`, controllerActions.signUp);
     router.post(`${baseApiPath}/forgot-password`, controllerActions.forgotPassword);

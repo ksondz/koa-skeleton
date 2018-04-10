@@ -31,7 +31,7 @@ class AuthController extends AbstractController {
    */
   getActions() {
     return {
-      signIn: this.signInAction.bind(this),
+      auth: this.authAction.bind(this),
       logout: this.logoutAction.bind(this),
       signUp: this.signUpAction.bind(this),
       forgotPassword: this.forgotPasswordAction.bind(this),
@@ -45,7 +45,7 @@ class AuthController extends AbstractController {
    * @param next
    * @return {Promise<void>}
    */
-  async signInAction(ctx, next) {
+  async authAction(ctx, next) {
 
     const AuthValidator = this.getValidatorService().get('AuthValidator');
 
@@ -120,9 +120,9 @@ class AuthController extends AbstractController {
    */
   async forgotPasswordAction(ctx, next) {
 
-    const ForgotValidator = this.getValidatorService().get('ForgotValidator');
+    const ForgotPasswordValidator = this.getValidatorService().get('ForgotPasswordValidator');
 
-    const validateData = await ForgotValidator.validate(ctx.request.body);
+    const validateData = await ForgotPasswordValidator.validate(ctx.request.body);
 
     const teacher = await this.getUserRepository().findTeacherByEmail(validateData.email);
 
