@@ -1,6 +1,6 @@
 // auth/controllers/AuthController.js
 
-const AbstractController = require('../../skeletonExtension/controller/AbstractController');
+const AbstractController = require('./../../core/controller/AbstractController');
 const TokenTypeEnum = require('./../enum/TokenTypeEnum');
 const UserStateEnum = require('./../../user/enum/UserStateEnum');
 
@@ -8,25 +8,20 @@ const UserStateEnum = require('./../../user/enum/UserStateEnum');
 class AuthController extends AbstractController {
 
 
-  static get OAUTH_REFRESH_TOKEN_TYPE() {
-    return 'refreshToken';
-  }
-
-
   /**
    * @param modelService
    * @param validatorService
    * @param cryptoService
    * @param mailService
-   * @param oauthService
+   * @param authService
    * @param moment
    */
-  constructor(modelService, validatorService, cryptoService, mailService, oauthService, moment) {
+  constructor(modelService, validatorService, cryptoService, mailService, authService, moment) {
     super(modelService, validatorService);
 
     this.cryptoService = cryptoService;
     this.mailService = mailService;
-    this.oauthService = oauthService;
+    this.authService = authService;
     this.moment = moment;
   }
   
@@ -36,9 +31,9 @@ class AuthController extends AbstractController {
    */
   getActions() {
     return {
-      oauth: this.oauthAction.bind(this),
+      signIn: this.signInAction.bind(this),
       logout: this.logoutAction.bind(this),
-      registration: this.registrationAction.bind(this),
+      signUp: this.signUpAction.bind(this),
       forgotPassword: this.forgotPasswordAction.bind(this),
       updateForgotPassword: this.updateForgotPasswordAction.bind(this),
     };
@@ -50,15 +45,15 @@ class AuthController extends AbstractController {
    * @param next
    * @return {Promise<void>}
    */
-  async oauthAction(ctx, next) {
+  async signInAction(ctx, next) {
 
-    const OAuthValidator = this.getValidatorService().get('OAuthValidator');
+    const AuthValidator = this.getValidatorService().get('AuthValidator');
 
-    const validatedData = await OAuthValidator.validate(ctx.request.body);
+    const validatedData = await AuthValidator.validate(ctx.request.body);
 
     let user;
 
-    if (validatedData.type === AuthController.OAUTH_REFRESH_TOKEN_TYPE) {
+    if (validatedData.type === TokenTypeEnum.REFRESH_TOKEN_TYPE) {
 
       const refreshToken = await this.getAccessTokenRepository().findRefreshToken(validatedData.refreshToken);
       await refreshToken.destroy();
@@ -79,8 +74,8 @@ class AuthController extends AbstractController {
     // TODO: move it inside AccessToken model. We can use factory method for this type
     const newAccessToken = await this.getAccessTokenRepository().create({
       userId: user.id,
-      token: this.oauthService.generateToken(user),
-      type: TokenTypeEnum.ACCESS_TYPE,
+      token: this.authService.generateToken(user),
+      type: TokenTypeEnum.ACCESS_TOKEN_TYPE,
       expDate: this.moment().add(100, 'days').format(),
     });
 
@@ -98,7 +93,7 @@ class AuthController extends AbstractController {
    * @param next
    * @return {Promise<void>}
    */
-  async registrationAction(ctx, next) {
+  async signUpAction(ctx, next) {
 
     const RegistrationValidator = this.getValidatorService().get('RegistrationValidator');
 
@@ -265,10 +260,10 @@ class AuthController extends AbstractController {
   }
 
   /**
-   * @return OAuthService
+   * @return AuthService
    */
-  getOAuthService() {
-    return this.oauthService;
+  getAuthService() {
+    return this.authService;
   }
 
 }

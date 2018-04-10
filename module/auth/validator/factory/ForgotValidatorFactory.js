@@ -1,6 +1,6 @@
 // auth/validator/factory/ForgotValidatorFactory.js
 
-const FactoryInterface = require('../../../skeletonExtension/factory/FactoryInterface');
+const FactoryInterface = require('../../../core/factory/FactoryInterface');
 
 const ForgotValidator = require('./../ForgotValidator');
 

@@ -1,6 +1,6 @@
 // auth/Validator/RegistrationValidator.js
 
-const BaseValidator = require('../../skeletonExtension/validator/BaseValidator');
+const BaseValidator = require('../../core/validator/BaseValidator');
 
 
 class RegistrationValidator extends BaseValidator {

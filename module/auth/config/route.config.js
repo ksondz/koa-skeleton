@@ -1,4 +1,4 @@
-// oauth/config/route.config.js
+// auth/config/route.config.js
 
 
 // routes

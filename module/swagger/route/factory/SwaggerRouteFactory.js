@@ -1,6 +1,6 @@
 // swagger/route/factory/SwaggerRouteFactory.js
 
-const FactoryInterface = require('../../../skeletonExtension/factory/FactoryInterface');
+const FactoryInterface = require('../../../core/factory/FactoryInterface');
 
 const SwaggerRoute = require('./../SwaggerRoute');
 

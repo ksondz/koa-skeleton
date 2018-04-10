@@ -1,6 +1,6 @@
 // auth/Validator/PasswordValidator.js
 
-const BaseValidator = require('../../skeletonExtension/validator/BaseValidator');
+const BaseValidator = require('../../core/validator/BaseValidator');
 
 
 class PasswordValidator extends BaseValidator {

@@ -5,7 +5,7 @@ const Koa = require('koa');
 
 const config = require('./config/app.config');
 
-const AppExtension = require('./module/skeletonExtension/AppExtension');
+const Application = require('./lib/Application');
 
 const cors = require('koa-cors');
 const bodyParser = require('koa-bodyparser');
@@ -16,11 +16,11 @@ const staticServer = require('koa-static-server');
 
   const app = new Koa();
 
-  const appExtension = new AppExtension(app, config);
+  const application = new Application(app, config);
+  await application.loadModules();
 
-  await appExtension.loadModules();
-
-  const ServiceManager = appExtension.getServiceManager();
+  /** @var ServiceManager */
+  const ServiceManager = application.getServiceManager();
 
   /** @var ModelService */
   const ModelService = ServiceManager.get('ModelService');
@@ -29,19 +29,19 @@ const staticServer = require('koa-static-server');
   /** @var ErrorService */
   const ErrorService = ServiceManager.get('ErrorService');
 
-  /** @var OAuthService */
-  const OAuthService = ServiceManager.get('OAuthService');
+  /** @var AuthService */
+  const AuthService = ServiceManager.get('AuthService');
 
   /** @var RouterService */
   const RouterService = ServiceManager.get('RouterService');
 
   app
   // Top middleware is the error handler.
-    .use(ErrorService.handle)
+    .use(ErrorService.handleError)
 
     .use(cors({ methods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'] }))
     .use(bodyParser({ multipart: true, strict: true }))
-    .use(OAuthService.authorization);
+    .use(AuthService.authorization);
 
   await RouterService.initRoutes();
 

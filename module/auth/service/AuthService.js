@@ -1,11 +1,11 @@
-// auth/service/OAuthService.js
+// auth/service/AuthService.js
 
 const { sign, verify } = require('jsonwebtoken');
 
 const UserRoleEnum = require('./../../user/enum/UserRoleEnum');
 
 
-class OAuthService {
+class AuthService {
 
   /**
    * @return {string}
@@ -93,13 +93,13 @@ class OAuthService {
       const accessToken = await this.getAccessTokenRepository().findAccessToken(authToken);
 
       if (!accessToken) {
-        throw this.getErrorService().createNotAuthorizedError(OAuthService.TOKEN_IS_NOT_FOUNT_MESSAGE);
+        throw this.getErrorService().createNotAuthorizedError(AuthService.TOKEN_IS_NOT_FOUNT_MESSAGE);
       }
 
       const user = await this.getUserRepository().findById(accessToken.userId);
 
       if (!user) {
-        throw this.getErrorService().createNotAuthorizedError(OAuthService.USER_IS_NOT_FOUNT_MESSAGE);
+        throw this.getErrorService().createNotAuthorizedError(AuthService.USER_IS_NOT_FOUNT_MESSAGE);
       }
 
       ctx.state.role = user.role;
@@ -121,12 +121,12 @@ class OAuthService {
 
     switch (true) {
       case (!refreshToken):
-        throw this.getErrorService().createNotAuthorizedError(OAuthService.REFRESH_TOKEN_IS_NOT_FOUNT_MESSAGE);
+        throw this.getErrorService().createNotAuthorizedError(AuthService.REFRESH_TOKEN_IS_NOT_FOUNT_MESSAGE);
         // TODO: move condition inside AccessToken model
       case (refreshToken.expiredAt < (Date.now())):
         await this.getAccessTokenRepository().destroyById(refreshToken.id);
 
-        throw this.getErrorService().createNotAuthorizedError(OAuthService.REFRESH_TOKEN_IS_EXPIRED);
+        throw this.getErrorService().createNotAuthorizedError(AuthService.REFRESH_TOKEN_IS_EXPIRED);
 
       default:
         return true;
@@ -170,4 +170,4 @@ class OAuthService {
   }
 }
 
-module.exports = OAuthService;
+module.exports = AuthService;

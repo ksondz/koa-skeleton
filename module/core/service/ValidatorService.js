@@ -2,7 +2,7 @@
 
 const FactoryInterface = require('./../factory/FactoryInterface');
 
-const ServiceManager = require('./ServiceManager');
+const ServiceManager = require('./manager/ServiceManager');
 
 
 class ValidatorService extends ServiceManager {

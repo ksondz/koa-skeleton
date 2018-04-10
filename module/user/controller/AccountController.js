@@ -1,6 +1,6 @@
 // user/controllers/AccountController.js
 
-const AbstractController = require('../../skeletonExtension/controller/AbstractController');
+const AbstractController = require('../../core/controller/AbstractController');
 const UserStateEnum = require('./../../user/enum/UserStateEnum');
 const UserRoleEnum = require('./../../user/enum/UserRoleEnum');
 const TokenTypeEnum = require('./../../auth/enum/TokenTypeEnum');
@@ -12,12 +12,12 @@ class AccountController extends AbstractController {
   /**
    * @param modelService
    * @param validatorService
-   * @param oauthService
+   * @param authService
    */
-  constructor(modelService, validatorService, oauthService) {
+  constructor(modelService, validatorService, authService) {
     super(modelService, validatorService);
 
-    this.oauthService = oauthService;
+    this.authService = authService;
   }
 
   /**
@@ -61,8 +61,8 @@ class AccountController extends AbstractController {
 
     const newToken = await this.getAccessTokenRepository().create({
       userId: userModel.id,
-      token: this.oauthService.generateToken(userModel),
-      type: TokenTypeEnum.ACCESS_TYPE,
+      token: this.authService.generateToken(userModel),
+      type: TokenTypeEnum.ACCESS_TOKEN_TYPE,
       expDate: moment().add(100, 'days').format(),
     });
 

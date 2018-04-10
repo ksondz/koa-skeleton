@@ -30,10 +30,11 @@ class ErrorService {
       validation: BaseResponse.VALIDATION_STATUS,
     };
 
+
     /**
-     * @type {any}
+     * @type {Promise<void>}
      */
-    this.handle = this.handleError.bind(this);
+    this.handleError = this.handleError.bind(this);
   }
 
   /**

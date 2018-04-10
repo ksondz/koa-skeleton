@@ -86,18 +86,6 @@ class ModelService {
   getModels() {
     return this.models;
   }
-
-
-  /**
-   * @param modelClass
-   * @return {Request<CodeCommit.GetRepositoryOutput, AWSError>}
-   */
-  getModelRepository(modelClass) {
-
-    const model = this.get(modelClass);
-
-    return model.getRepository();
-  }
 }
 
 module.exports = ModelService;

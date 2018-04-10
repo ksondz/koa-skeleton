@@ -6,7 +6,7 @@ const PasswordValidator = require('../validator/PasswordValidator');
 const RegistrationValidatorFactory = require('../validator/factory/RegistrationValidatorFactory');
 const LoginValidatorFactory = require('../validator/factory/LoginValidatorFactory');
 const ForgotValidatorFactory = require('../validator/factory/ForgotValidatorFactory');
-const OAuthValidatorFactory = require('../validator/factory/OAuthValidatorFactory');
+const AuthValidatorFactory = require('../validator/factory/AuthValidatorFactory');
 
 
 module.exports = {
@@ -16,6 +16,6 @@ module.exports = {
     RegistrationValidator: RegistrationValidatorFactory,
     LoginValidator: LoginValidatorFactory,
     ForgotValidator: ForgotValidatorFactory,
-    OAuthValidator: OAuthValidatorFactory,
+    AuthValidator: AuthValidatorFactory,
   },
 };

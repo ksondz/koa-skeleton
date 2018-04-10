@@ -1,4 +1,4 @@
-// appExtension/config/controller.config.js
+// auth/config/controller.config.js
 
 const AuthControllerFactory = require('./../controller/factory/AuthControllerFactory');
 

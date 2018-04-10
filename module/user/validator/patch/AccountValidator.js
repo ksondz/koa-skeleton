@@ -1,6 +1,6 @@
 // user/validator/patch/AccountValidator.js
 
-const BaseValidator = require('../../../skeletonExtension/validator/BaseValidator');
+const BaseValidator = require('../../../core/validator/BaseValidator');
 
 
 class AccountValidator extends BaseValidator {

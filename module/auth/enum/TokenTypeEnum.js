@@ -1,32 +1,32 @@
 // auth/enum/TokenTypeEnum.js
 
-const BaseEnum = require('../../skeletonExtension/enum/BaseEnum');
+const BaseEnum = require('../../core/enum/BaseEnum');
 
 
 class TokenTypeEnum extends BaseEnum {
 
-  static get ACCESS_TYPE() {
-    return 'access';
+  static get ACCESS_TOKEN_TYPE() {
+    return 'accessToken';
   }
 
-  static get REFRESH_TYPE() {
-    return 'refresh';
+  static get REFRESH_TOKEN_TYPE() {
+    return 'refreshToken';
   }
 
-  static get REGISTER_TYPE() {
-    return 'register';
+  static get REGISTER_TOKEN_TYPE() {
+    return 'registerToken';
   }
 
-  static get FORGOT_TYPE() {
-    return 'forgot';
+  static get FORGOT_TOKEN_TYPE() {
+    return 'forgotToken';
   }
 
   static getValues() {
     return [
-      this.ACCESS_TYPE,
-      this.REFRESH_TYPE,
-      this.REGISTER_TYPE,
-      this.FORGOT_TYPE,
+      this.ACCESS_TOKEN_TYPE,
+      this.REFRESH_TOKEN_TYPE,
+      this.REGISTER_TOKEN_TYPE,
+      this.FORGOT_TOKEN_TYPE,
     ];
   }
 }

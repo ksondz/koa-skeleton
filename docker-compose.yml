@@ -7,7 +7,7 @@ services:
     image: postgres:10
     restart: always
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_DB: koa_app_db
       POSTGRES_USER: koa_app_user

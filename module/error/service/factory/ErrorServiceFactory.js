@@ -1,7 +1,7 @@
 // error/validator/factory/ErrorServiceFactory.js
 
 
-const FactoryInterface = require('../../../skeletonExtension/factory/FactoryInterface');
+const FactoryInterface = require('../../../core/factory/FactoryInterface');
 
 const ErrorService = require('./../ErrorService');
 

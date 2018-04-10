@@ -1,6 +1,6 @@
 // auth/Validator/LoginValidator.js
 
-const BaseValidator = require('../../skeletonExtension/validator/BaseValidator');
+const BaseValidator = require('../../core/validator/BaseValidator');
 
 const UserRoleEnum = require('./../../user/enum/UserRoleEnum');
 const UserStateEnum = require('./../../user/enum/UserStateEnum');

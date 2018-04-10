@@ -1,7 +1,7 @@
 // core/service/ControllerService.js
 
 
-const ServiceManager = require('./ServiceManager');
+const ServiceManager = require('./manager/ServiceManager');
 
 
 class ControllerService extends ServiceManager {

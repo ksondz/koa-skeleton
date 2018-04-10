@@ -1,6 +1,6 @@
 // core/service/factory/ServiceManagerFactory.js
 
-const ServiceManager = require('./../ServiceManager');
+const ServiceManager = require('./ServiceManager');
 
 
 class ServiceManagerFactory {

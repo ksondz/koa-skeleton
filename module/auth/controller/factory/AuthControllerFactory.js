@@ -1,7 +1,7 @@
 // auth/controller/factory/RestControllerFactory.js
 
 
-const FactoryInterface = require('../../../skeletonExtension/factory/FactoryInterface');
+const FactoryInterface = require('./../../../core/factory/FactoryInterface');
 
 const AuthController = require('./../AuthController');
 const moment = require('moment');
@@ -22,9 +22,9 @@ class AuthControllerFactory extends FactoryInterface {
     const validatorService = this.getServiceManager().get('ValidatorService');
     const cryptoService = this.getServiceManager().get('CryptoService');
     const mailService = this.getServiceManager().get('MailService');
-    const oauthService = this.getServiceManager().get('OAuthService');
+    const authService = this.getServiceManager().get('AuthService');
 
-    return new AuthController(modelService, validatorService, cryptoService, mailService, oauthService, moment);
+    return new AuthController(modelService, validatorService, cryptoService, mailService, authService, moment);
   }
 }
 

@@ -1,6 +1,6 @@
 // config/app.config.js
 
-const EnvironmentService = require('../module/skeletonExtension/service/EnvironmentService');
+const EnvironmentService = require('./../module/core/service/EnvironmentService');
 
 /**
  * Set environment
@@ -14,22 +14,6 @@ module.exports.env = EnvironmentService.getEnvironment();
  * Inject db config
  */
 module.exports.db = require('./sequelize.db.config')[EnvironmentService.getEnvironment()];
-
-
-/**
- * AWS S3 credentials
- *
- * @type {{S3: {accessKeyId: string, secretAccessKey: string, region: string}}}
- */
-module.exports.aws = {
-  S3: {
-    accessKeyId: process.env.S3_ACCESS_KEY_ID,
-    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-    Bucket: process.env.S3_BUCKET,
-    region: process.env.S3_REGION,
-    url: process.env.S3_URL,
-  },
-};
 
 
 /**

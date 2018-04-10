@@ -1,6 +1,6 @@
 // core/service/ServiceManager.js
 
-const FactoryInterface = require('./../factory/FactoryInterface');
+const FactoryInterface = require('../../factory/FactoryInterface');
 
 
 class ServiceManager {

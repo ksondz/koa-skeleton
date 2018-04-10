@@ -1,5 +1,5 @@
 
-const EnvironmentService = require('./module/skeletonExtension/service/EnvironmentService');
+const EnvironmentService = require('./module/core/service/EnvironmentService');
 
 const pm2Name = EnvironmentService.isProduction() ? 'koa-app-prod' : 'koa-app-dev';
 

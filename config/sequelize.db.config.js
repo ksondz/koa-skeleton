@@ -1,6 +1,6 @@
 // config/sequelize.db.config.js
 
-const EnvironmentService = require('../module/skeletonExtension/service/EnvironmentService');
+const EnvironmentService = require('./../module/core/service/EnvironmentService');
 
 const dbConfig = {};
 

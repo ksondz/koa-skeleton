@@ -1,7 +1,7 @@
 // auth/service/factory/RoleResolverServiceFactory.js
 
 
-const FactoryInterface = require('../../../skeletonExtension/factory/FactoryInterface');
+const FactoryInterface = require('../../../core/factory/FactoryInterface');
 
 const RoleResolverService = require('./../RoleResolverService');
 

@@ -1,5 +1,5 @@
 
-const BaseRepository = require('../../skeletonExtension/repository/BaseRepository');
+const BaseRepository = require('../../core/repository/BaseRepository');
 
 const TokenTypeEnum = require('./../enum/TokenTypeEnum');
 
@@ -30,7 +30,7 @@ class AccessTokenRepository extends BaseRepository {
     const result = await super.findAll({
       where: {
         user_id: userId,
-        type: TokenTypeEnum.ACCESS_TYPE,
+        type: TokenTypeEnum.ACCESS_TOKEN_TYPE,
       },
     });
 
@@ -46,7 +46,7 @@ class AccessTokenRepository extends BaseRepository {
     const result = await super.findOne({
       where: {
         token,
-        type: TokenTypeEnum.ACCESS_TYPE,
+        type: TokenTypeEnum.ACCESS_TOKEN_TYPE,
       },
     });
 
@@ -62,7 +62,7 @@ class AccessTokenRepository extends BaseRepository {
     const result = await super.findOne({
       where: {
         token,
-        type: TokenTypeEnum.REFRESH_TYPE,
+        type: TokenTypeEnum.REFRESH_TOKEN_TYPE,
       },
     });
 
