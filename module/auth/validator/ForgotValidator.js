@@ -1,4 +1,4 @@
-// auth/Validator/ForgotValidator.js
+
 
 const BaseValidator = require('../../core/validator/BaseValidator');
 

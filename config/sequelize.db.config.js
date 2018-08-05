@@ -4,7 +4,7 @@ const EnvironmentService = require('./../module/core/service/EnvironmentService'
 
 const dbConfig = {};
 
-EnvironmentService.ALLOWED_ENV_ARRAY.forEach((environment) => {
+EnvironmentService.ALL_ENVIRONMENTS.forEach((environment) => {
   dbConfig[environment] = {
     username: process.env.DB_PG_USER,
     password: process.env.DB_PG_PASS,
@@ -12,6 +12,8 @@ EnvironmentService.ALLOWED_ENV_ARRAY.forEach((environment) => {
     host: process.env.DB_PG_HOSTNAME,
     port: process.env.DB_PG_PORT,
     dialect: 'postgres',
+    seederStorage: 'sequelize',
+    logging: false,
   };
 });
 

@@ -1,4 +1,4 @@
-// auth/service/RoleResolverService.js
+
 
 const UserRoleEnum = require('../../user/enum/UserRoleEnum');
 
@@ -13,8 +13,6 @@ class RoleResolverService {
 
     this.isAuthorized = this.isAuthorized.bind(this);
     this.isAdmin = this.isAdmin.bind(this);
-    this.isTeacher = this.isTeacher.bind(this);
-    this.isStudent = this.isStudent.bind(this);
     this.isGuest = this.isGuest.bind(this);
   }
 
@@ -27,7 +25,7 @@ class RoleResolverService {
 
     const role = this.getStateRole(ctx);
 
-    if (role === UserRoleEnum.GUEST_USER_ROLE) {
+    if (role === UserRoleEnum.GUEST_ROLE) {
       await next();
     }
   }
@@ -55,7 +53,7 @@ class RoleResolverService {
 
     const role = this.getStateRole(ctx);
 
-    if (this.isAuthorizedRole(role) && (role !== UserRoleEnum.ADMIN_USER_ROLE)) {
+    if (this.isAuthorizedRole(role) && (role !== UserRoleEnum.ADMIN_ROLE)) {
       throw this.getErrorService().createForbiddenError();
     }
 
@@ -63,59 +61,11 @@ class RoleResolverService {
   }
 
   /**
-   * @param ctx
-   * @param next
-   * @return {Promise<void>}
-   */
-  async isTeacher(ctx, next) {
-
-    const role = this.getStateRole(ctx);
-
-    if (this.isAuthorizedRole(role)) {
-
-      switch (role) {
-        case (UserRoleEnum.TEACHER_USER_ROLE):
-        case (UserRoleEnum.ADMIN_USER_ROLE):
-          await next();
-          break;
-        default:
-          throw this.getErrorService().createForbiddenError();
-      }
-
-    }
-  }
-
-  /**
-   * @param ctx
-   * @param next
-   * @return {Promise<void>}
-   */
-  async isStudent(ctx, next) {
-
-    const role = this.getStateRole(ctx);
-
-    if (this.isAuthorizedRole(role)) {
-
-      switch (role) {
-        case (UserRoleEnum.STUDENT_USER_ROLE):
-        case (UserRoleEnum.TEACHER_USER_ROLE):
-        case (UserRoleEnum.ADMIN_USER_ROLE):
-          await next();
-          break;
-        default:
-          throw this.getErrorService().createForbiddenError();
-      }
-
-    }
-  }
-
-
-  /**
    * @param role
    * @returns {boolean}
    */
   isAuthorizedRole(role) {
-    if (role === UserRoleEnum.GUEST_USER_ROLE) {
+    if (role === UserRoleEnum.GUEST_ROLE) {
       throw this.getErrorService().createNotAuthorizedError();
     }
 

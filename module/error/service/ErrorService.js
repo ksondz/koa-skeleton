@@ -1,4 +1,4 @@
-// error/service/ErrorService.js
+
 
 const BaseResponse = require('./../response/BaseResponse');
 
@@ -14,12 +14,7 @@ const ValidationResponse = require('./../response/ValidationResponse');
 class ErrorService {
 
 
-  /**
-   * @param app
-   */
-  constructor(app) {
-
-    this.app = app;
+  constructor() {
 
     this.status = {
       badRequest: BaseResponse.BAD_REQUEST_STATUS,

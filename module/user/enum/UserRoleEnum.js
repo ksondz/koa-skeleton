@@ -1,4 +1,4 @@
-// user/enum/BaseEnum.js
+
 
 const BaseEnum = require('../../core/enum/BaseEnum');
 

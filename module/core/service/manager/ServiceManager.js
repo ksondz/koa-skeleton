@@ -1,19 +1,23 @@
-// core/service/ServiceManager.js
+
 
 const FactoryInterface = require('../../factory/FactoryInterface');
 
 
 class ServiceManager {
 
-  
-  constructor(app, config) {
 
-    this.app = app;
+  /**
+   * @param config
+   * @param configClasses
+   * @param factoryServiceManager
+   */
+  constructor(config, configClasses, factoryServiceManager) {
     this.config = config;
-    
+    this.configClasses = configClasses || this.getServiceManagerConfig().services;
+    this.factoryServiceManager = factoryServiceManager || this;
+
     this.instances = {};
   }
-
 
   /**
    * @param name
@@ -25,19 +29,39 @@ class ServiceManager {
 
       const InstanceClass = this.getInstanceClass(name);
 
-      const instance = this.initInstance(InstanceClass);
-      this.addInstance(name, instance);
+      if (InstanceClass.prototype instanceof FactoryInterface) {
+        this.initInstanceFactory(name, InstanceClass);
+      } else {
+        this.initInstance(name, InstanceClass);
+      }
     }
 
     return this.getInstance(name);
   }
 
+  /**
+   * @param name
+   * @param InstanceClassFactory
+   */
+  initInstanceFactory(name, InstanceClassFactory) {
+    this.addInstance(name, new InstanceClassFactory(this.factoryServiceManager));
+  }
 
   /**
+   * @param name
    * @param InstanceClass
    */
-  initInstance(InstanceClass) {
-    return (InstanceClass.prototype instanceof FactoryInterface) ? new InstanceClass(this.app) : new InstanceClass();
+  initInstance(name, InstanceClass) {
+    this.addInstance(name, new InstanceClass());
+  }
+
+  /**
+   * @param name
+   * @param instance
+   * @return {*}
+   */
+  addInstance(name, instance) {
+    this.getInstances()[name] = instance;
   }
 
   /**
@@ -46,11 +70,11 @@ class ServiceManager {
    */
   getInstanceClass(name) {
 
-    if (!this.getConfig() || !this.getConfig()[name]) {
+    if (!this.getConfigClasses()[name]) {
       throw new TypeError(`Instance with name ${name} does not exist`);
     }
 
-    return this.getConfig()[name];
+    return this.getConfigClasses()[name];
   }
 
   /**
@@ -70,18 +94,6 @@ class ServiceManager {
   }
 
   /**
-   * @param name
-   * @param instance
-   * @return {ServiceManager}
-   */
-  addInstance(name, instance) {
-
-    this.getInstances()[name] = instance;
-
-    return this;
-  }
-
-  /**
    * @return {{}}
    */
   getInstances() {
@@ -94,17 +106,19 @@ class ServiceManager {
   getConfig() {
     return this.config;
   }
-  
-  getServiceManager() {
-    return this.getAppContext().getServiceManager();
+
+  /**
+   * Get Service Config
+   */
+  getServiceManagerConfig() {
+    return this.config.service_manager;
   }
-  
-  getAppConfig() {
-    return this.getAppContext().getAppConfig();
-  }
-  
-  getAppContext() {
-    return this.app.context;
+
+  /**
+   * @return {*|ECS.StringList|ECS.Services|Support.ServiceList|Health.serviceList|module.exports.service_manager.services}
+   */
+  getConfigClasses() {
+    return this.configClasses;
   }
 }
 

@@ -1,14 +1,20 @@
-// auth/service/CryptoService.js
 
 
 class CryptoService {
 
-  constructor(errorService, bcrypt, crypto, saltRounds, encoding) {
+
+  /**
+   * @param errorService
+   * @param bcrypt
+   * @param crypto
+   */
+  constructor(errorService, bcrypt, crypto) {
     this.errorService = errorService;
     this.bcrypt = bcrypt;
     this.crypto = crypto;
-    this.saltRounds = saltRounds;
-    this.encoding = encoding;
+
+    this.saltRounds = 10;
+    this.encoding = 'hex';
   }
 
 

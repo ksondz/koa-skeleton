@@ -1,42 +1,27 @@
-// core/factory/FactoryInterface.js
 
 
 class FactoryInterface {
 
 
   /**
-   * @param app
+   * @param serviceManager
    */
-  constructor(app) {
-    this.app = app;
+  constructor(serviceManager) {
+    this.serviceManager = serviceManager;
   }
   
   /**
    * @return {*}
    */
-  getAppConfig() {
-    return this.getAppContext().getAppConfig();
+  getConfig() {
+    return this.getServiceManager().getConfig();
   }
 
   /**
    * @return {*}
    */
   getServiceManager() {
-    return this.getAppContext().getServiceManager();
-  }
-
-  /**
-   * {*}
-   */
-  getAppContext() {
-    return this.getApp().context;
-  }
-
-  /**
-   * @return {*}
-   */
-  getApp() {
-    return this.app;
+    return this.serviceManager;
   }
 }
 

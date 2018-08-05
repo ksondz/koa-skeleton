@@ -1,4 +1,4 @@
-// user/validator/patch/AccountValidator.js
+
 
 const BaseValidator = require('../../../core/validator/BaseValidator');
 

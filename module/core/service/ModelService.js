@@ -1,4 +1,4 @@
-// core/service/ModelService.js
+
 
 const BaseRepository = require('./../repository/BaseRepository');
 const DefaultExtractor = require('./../extractor/DefaultExtractor');

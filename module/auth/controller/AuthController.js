@@ -1,4 +1,4 @@
-// auth/controllers/AuthController.js
+
 
 const AbstractController = require('./../../core/controller/AbstractController');
 const TokenTypeEnum = require('./../enum/TokenTypeEnum');
@@ -11,13 +11,14 @@ class AuthController extends AbstractController {
   /**
    * @param modelService
    * @param validatorService
+   * @param errorService
    * @param cryptoService
    * @param mailService
    * @param authService
    * @param moment
    */
-  constructor(modelService, validatorService, cryptoService, mailService, authService, moment) {
-    super(modelService, validatorService);
+  constructor(modelService, validatorService, errorService, cryptoService, mailService, authService, moment) {
+    super(modelService, validatorService, errorService);
 
     this.cryptoService = cryptoService;
     this.mailService = mailService;

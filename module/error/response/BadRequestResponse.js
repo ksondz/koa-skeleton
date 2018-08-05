@@ -1,4 +1,4 @@
-// error/response/BadRequestResponse.js
+
 
 const BaseResponse = require('./BaseResponse');
 

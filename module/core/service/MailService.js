@@ -1,4 +1,3 @@
-// core/service/EnvironmentService.js
 
 
 class MailService {

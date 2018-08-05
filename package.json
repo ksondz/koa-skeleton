@@ -13,6 +13,8 @@
     "lint": "./node_modules/.bin/eslint  . *.js",
     "lint-fix": "./node_modules/.bin/eslint --fix  . *.js",
     "check:security": "./node_modules/nsp/bin/nsp check",
+    "db:create": "sequelize db:create",
+    "db:drop": "sequelize db:drop",
     "db:migrate": "sequelize db:migrate",
     "db:migrate:undo": "sequelize db:migrate:undo",
     "db:migrate:undo:all": "sequelize db:migrate:undo:all",

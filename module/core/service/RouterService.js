@@ -1,58 +1,57 @@
-// core/service/RouterService.js
 
+
+const bodyParser = require('koa-bodyparser');
+const cors = require('koa-cors');
 
 const FactoryInterface = require('./../factory/FactoryInterface');
 
-const ServiceManager = require('./manager/ServiceManager');
 
-
-class RouterService extends ServiceManager {
+class RouterService {
 
 
   /**
-   *
-   * @param app
-   * @param routes
    * @param router
+   * @param serviceManager
    */
-  constructor(app, routes, router) {
-
-    super(app, routes);
-
+  constructor(router, serviceManager) {
     this.router = router;
+    this.serviceManager = serviceManager;
+
+    this.bodyParserOptions = { multipart: true, strict: true };
+    this.corsOptions = {
+      methods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'],
+    };
   }
-  
+
+  /**
+   * @return {Promise<Function>}
+   */
+  async getRoutes() {
+    await this.initRoutes();
+
+    return this.router.routes();
+  }
 
   /**
    * @return {Promise<void>}
    */
   async initRoutes() {
-
-    const routes = this.getConfig();
-
-    await Object.keys(routes).forEach((routeName) => {
-
-      const route = this.get(routeName);
-
-      route.init();
+    const { routes } = this.getRouterConfig();
+    await Object.keys(routes).forEach((routeKey) => {
+      this.getInstance(routes[routeKey]).init();
     });
   }
 
-  
   /**
    * @param InstanceClass
    */
-  initInstance(InstanceClass) {
-
-    let instance;
+  getInstance(InstanceClass) {
 
     if (InstanceClass.prototype instanceof FactoryInterface) {
-      instance = new InstanceClass(this.app);
-    } else {
-      instance = new InstanceClass(this.getControllerService(), this, this.getRoleResolverService());
+      return new InstanceClass(this.getServiceManager());
     }
 
-    return instance;
+    return new InstanceClass(this.router, this.getRouterConfig(), this.getControllerService(), this.getRoleResolverService());
   }
 
   /**
@@ -62,11 +61,33 @@ class RouterService extends ServiceManager {
     return this.router;
   }
 
+
   /**
-   * @return {Router}
+   * @return {*}
    */
-  getBaseApi() {
-    return this.getRouterConfig().baseApi;
+  getRouterConfig() {
+    return this.getServiceManager().getConfig().router;
+  }
+
+  /**
+   * @return {*}
+   */
+  getBodyParser() {
+    return bodyParser(this.bodyParserOptions);
+  }
+
+  /**
+   * @return {*}
+   */
+  getCors() {
+    return cors(this.corsOptions);
+  }
+
+  /**
+   * @return {*}
+   */
+  getServiceManager() {
+    return this.serviceManager;
   }
 
   /**
@@ -81,13 +102,6 @@ class RouterService extends ServiceManager {
    */
   getRoleResolverService() {
     return this.getServiceManager().get('RoleResolverService');
-  }
-
-  /**
-   * @return {*}
-   */
-  getRouterConfig() {
-    return this.getAppConfig().router;
   }
 }
 

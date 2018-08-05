@@ -1,24 +1,24 @@
-// core/route/BaseRoute.js
 
 
 class BaseRoute {
 
-  init() {
-    throw this.getControllerService().getErrorService().createServerError('init method should be defined for each route');
+
+  /**
+   * @param router
+   * @param routerConfig
+   * @param controllerService
+   * @param roleResolverService
+   */
+  constructor(router, routerConfig, controllerService, roleResolverService) {
+    this.router = router;
+    this.routerConfig = routerConfig;
+
+    this.controllerService = controllerService;
+    this.roleResolverService = roleResolverService;
   }
 
 
-  /**
-   * @param controllerService
-   * @param routerService
-   * @param roleResolverService
-   */
-  constructor(controllerService, routerService, roleResolverService) {
-
-    this.controllerService = controllerService;
-    this.routerService = routerService;
-    this.roleResolverService = roleResolverService;
-
+  init() {
     this.getRouter().prefix('/');
   }
 
@@ -37,27 +37,18 @@ class BaseRoute {
     return apiPath;
   }
 
-
   /**
    * @return {*|Router}
    */
   getRouter() {
-    return this.getRouterService().getRouter();
+    return this.router;
   }
-
 
   /**
    * @return {*|Router}
    */
   getBaseApi() {
-    return this.getRouterService().getBaseApi();
-  }
-
-  /**
-   * {RoleResolverService}
-   */
-  getRouterService() {
-    return this.routerService;
+    return this.routerConfig.baseApi;
   }
 
   /**
@@ -67,6 +58,9 @@ class BaseRoute {
     return this.roleResolverService;
   }
 
+  /**
+   * @return {ControllerService}
+   */
   getControllerService() {
     return this.controllerService;
   }

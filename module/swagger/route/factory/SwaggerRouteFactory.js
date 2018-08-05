@@ -1,4 +1,4 @@
-// swagger/route/factory/SwaggerRouteFactory.js
+
 
 const FactoryInterface = require('../../../core/factory/FactoryInterface');
 
@@ -9,15 +9,20 @@ const koaSwagger = require('koa2-swagger-ui');
 
 class SwaggerRouteFactory extends FactoryInterface {
 
-  constructor(app) {
 
-    super(app);
+  /**
+   * @param serviceManager
+   * @return {SwaggerRoute}
+   */
+  constructor(serviceManager) {
 
-    const controllerService = this.getServiceManager().get('ControllerService');
-    const routerService = this.getServiceManager().get('RouterService');
-    const roleResolverService = this.getServiceManager().get('RoleResolverService');
+    super(serviceManager);
 
-    return new SwaggerRoute(controllerService, routerService, roleResolverService, koaSwagger, this.getSwaggerConfig());
+    const controllerService = serviceManager.get('ControllerService');
+    const roleResolverService = serviceManager.get('RoleResolverService');
+    const RouterService = serviceManager.get('RouterService');
+
+    return new SwaggerRoute(RouterService.getRouter(), RouterService.getRouterConfig(), controllerService, roleResolverService, koaSwagger, this.getSwaggerConfig());
   }
 
 
@@ -25,9 +30,9 @@ class SwaggerRouteFactory extends FactoryInterface {
    * @return {*|{title, oauthOptions, swaggerOptions, routePrefix, hideTopbar}}
    */
   getSwaggerConfig() {
-    const routerConfig = this.getAppConfig().router.host;
+    const routerConfig = this.getConfig().router.host;
 
-    return this.getAppConfig().swagger.getSwaggerConfig(routerConfig.host, routerConfig.port);
+    return this.getConfig().swagger.getSwaggerConfig(routerConfig.host, routerConfig.port);
   }
 }
 

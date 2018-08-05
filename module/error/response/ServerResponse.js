@@ -1,4 +1,4 @@
-// error/response/ServerResponse.js
+
 
 const BaseResponse = require('./BaseResponse');
 

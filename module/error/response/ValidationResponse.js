@@ -1,4 +1,4 @@
-// error/response/ValidationResponse.js
+
 
 const BaseResponse = require('./BaseResponse');
 

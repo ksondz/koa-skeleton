@@ -1,4 +1,4 @@
-// core/service/factory/ControllerServiceFactory.js
+
 
 const FactoryInterface = require('./../../factory/FactoryInterface');
 
@@ -7,18 +7,14 @@ const ControllerService = require('./../ControllerService');
 
 class ControllerServiceFactory extends FactoryInterface {
 
-
   /**
-   * @param app
+   * @param serviceManager
    * @return {ControllerService}
    */
-  constructor(app) {
+  constructor(serviceManager) {
+    super(serviceManager);
 
-    super(app);
-
-    const appConfig = this.getAppConfig();
-
-    return new ControllerService(app, appConfig.controllers);
+    return new ControllerService(serviceManager);
   }
 }
 

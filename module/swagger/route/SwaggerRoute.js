@@ -1,4 +1,4 @@
-// swagger/route/SwaggerRoute.js
+
 
 const BaseRoute = require('../../core/route/BaseRoute');
 
@@ -6,9 +6,9 @@ const BaseRoute = require('../../core/route/BaseRoute');
 class SwaggerRoute extends BaseRoute {
 
 
-  constructor(controllerService, routerService, roleResolverService, koaSwagger, swaggerConfig) {
+  constructor(router, routerConfig, controllerService, roleResolverService, koaSwagger, swaggerConfig) {
 
-    super(controllerService, routerService, roleResolverService);
+    super(router, routerConfig, controllerService, roleResolverService);
 
     this.koaSwagger = koaSwagger;
     this.swaggerConfig = swaggerConfig;
@@ -16,11 +16,10 @@ class SwaggerRoute extends BaseRoute {
 
 
   init() {
+    super.init();
 
     const swaggerPath = this.getApiPath('/swagger');
-    const router = this.getRouter();
-
-    router.get(`${swaggerPath}`, this.koaSwagger(this.swaggerConfig));
+    this.getRouter().get(`${swaggerPath}`, this.koaSwagger(this.swaggerConfig));
   }
 }
 

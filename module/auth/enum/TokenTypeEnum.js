@@ -1,4 +1,4 @@
-// auth/enum/TokenTypeEnum.js
+
 
 const BaseEnum = require('../../core/enum/BaseEnum');
 

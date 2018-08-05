@@ -1,4 +1,3 @@
-// swagger/config/module.config.js
 
 
 module.exports = {
@@ -20,6 +19,12 @@ module.exports = {
         routePrefix: false, // route where the view is returned
         hideTopbar: true, // hide swagger top bar
       };
+    },
+  },
+
+  router: {
+    routes: {
+      SwaggerRoute: require('./../route/factory/SwaggerRouteFactory'),
     },
   },
 };

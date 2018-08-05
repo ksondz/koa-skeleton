@@ -1,4 +1,4 @@
-// error/response/NotAuthorizedResponse.js
+
 
 const BaseResponse = require('./BaseResponse');
 

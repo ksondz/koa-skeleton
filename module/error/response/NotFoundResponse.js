@@ -1,4 +1,4 @@
-// error/response/NotFoundResponse.js
+
 
 const BaseResponse = require('./BaseResponse');
 

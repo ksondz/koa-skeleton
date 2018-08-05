@@ -1,4 +1,4 @@
-// core/validator/factory/MailServiceFactory.js
+
 
 const nodemailer = require('nodemailer');
 
@@ -11,23 +11,16 @@ class MailServiceFactory extends FactoryInterface {
 
 
   /**
-   * @param app
+   * @param serviceManager
    * @return {MailService}
    */
-  constructor(app) {
+  constructor(serviceManager) {
 
-    super(app);
+    super(serviceManager);
 
     const mailer = nodemailer;
-    const transportOptions = {
-      service: 'gmail',
-      auth: {
-        user: process.env.MAIL_USER, // generated ethereal user
-        pass: process.env.MAIL_PASS,  // generated ethereal password
-      },
-    };
-
-    const { baseApi } = this.getAppConfig().router;
+    const transportOptions = this.getConfig().mail.transport.options;
+    const { baseApi } = this.getConfig().router;
 
     return new MailService(mailer, transportOptions, baseApi);
   }

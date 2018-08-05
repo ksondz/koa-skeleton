@@ -1,4 +1,3 @@
-// user/controller/factory/AccountControllerFactory.js
 
 
 const FactoryInterface = require('../../../core/factory/FactoryInterface');
@@ -10,18 +9,19 @@ class AccountControllerFactory extends FactoryInterface {
 
 
   /**
-   * @param app
+   * @param serviceManager
    * @return {AccountController}
    */
-  constructor(app) {
+  constructor(serviceManager) {
 
-    super(app);
+    super(serviceManager);
 
     const modelService = this.getServiceManager().get('ModelService');
     const validatorService = this.getServiceManager().get('ValidatorService');
+    const errorService = this.getServiceManager().get('errorService');
     const authService = this.getServiceManager().get('AuthService');
 
-    return new AccountController(modelService, validatorService, authService);
+    return new AccountController(modelService, validatorService, errorService, authService);
   }
 }
 

@@ -1,4 +1,3 @@
-// core/extractor/DefaultExtractor.js
 
 
 class DefaultExtractor {

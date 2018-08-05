@@ -1,4 +1,6 @@
 
+// Please create new env.js file for your local environment
+
 module.exports = {
 
   APP_ENV: 'development',

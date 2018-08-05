@@ -1,4 +1,4 @@
-// core/enum/BaseEnum.js
+
 
 class BaseEnum {
 

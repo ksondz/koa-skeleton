@@ -1,10 +1,7 @@
-// auth/service/factory/CryptoServiceFactory.js
+
 
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-
-const saltRounds = 10;
-const encoding = 'hex';
 
 const FactoryInterface = require('../../../core/factory/FactoryInterface');
 
@@ -15,16 +12,16 @@ class CryptoServiceFactory extends FactoryInterface {
 
 
   /**
-   * @param app
+   * @param serviceManager
    * @return {CryptoService}
    */
-  constructor(app) {
+  constructor(serviceManager) {
 
-    super(app);
+    super(serviceManager);
 
     const errorService = this.getServiceManager().get('ErrorService');
 
-    return new CryptoService(errorService, bcrypt, crypto, saltRounds, encoding);
+    return new CryptoService(errorService, bcrypt, crypto);
   }
 }
 

@@ -1,4 +1,4 @@
-// core/service/EnvironmentService.js
+
 
 const appEnv = require('./../../../env/env');
 
@@ -18,7 +18,7 @@ class EnvironmentService {
     return 'test';
   }
 
-  static get ALLOWED_ENV_ARRAY() {
+  static get ALL_ENVIRONMENTS() {
     return [
       EnvironmentService.PRODUCTION_ENV,
       EnvironmentService.DEVELOPMENT_ENV,
@@ -41,7 +41,7 @@ class EnvironmentService {
     if (!EnvironmentService.isEnvironmentDefined()) {
       Object.assign(process.env, appEnv);
 
-      if (EnvironmentService.ALLOWED_ENV_ARRAY.indexOf(process.env.APP_ENV) === -1) {
+      if (EnvironmentService.ALL_ENVIRONMENTS.indexOf(process.env.APP_ENV) === -1) {
         process.env.APP_ENV = EnvironmentService.DEVELOPMENT_ENV;
       }
     }

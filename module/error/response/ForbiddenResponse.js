@@ -1,4 +1,4 @@
-// error/response/ForbiddenResponse.js
+
 
 const BaseResponse = require('./BaseResponse');
 

@@ -1,4 +1,4 @@
-// error/response/BaseResponse.js
+
 
 class BaseResponse extends Error {
 

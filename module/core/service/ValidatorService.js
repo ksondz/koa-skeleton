@@ -1,6 +1,4 @@
-// core/service/ValidatorService.js
 
-const FactoryInterface = require('./../factory/FactoryInterface');
 
 const ServiceManager = require('./manager/ServiceManager');
 
@@ -8,29 +6,27 @@ const ServiceManager = require('./manager/ServiceManager');
 class ValidatorService extends ServiceManager {
 
   /**
-   * @param name
-   * @return {*}
+   * @param serviceManager
    */
-  get(name) {
+  constructor(serviceManager) {
+    super(serviceManager.getConfig(), serviceManager.getServiceManagerConfig().validators, serviceManager);
 
-    const InstanceClass = this.getInstanceClass(name);
-    let instance;
-
-    if (InstanceClass.prototype instanceof FactoryInterface) {
-      instance = new InstanceClass(this.app);
-    } else {
-      instance = new InstanceClass(this.getErrorService());
-    }
-    
-    return instance;
+    this.serviceManager = serviceManager;
   }
 
+  /**
+   * @param name
+   * @param InstanceClass
+   */
+  initInstance(name, InstanceClass) {
+    this.addInstance(name, new InstanceClass(this.getErrorService()));
+  }
 
   /**
    * @return {*}
    */
   getErrorService() {
-    return this.getServiceManager().get('ErrorService');
+    return this.serviceManager.get('ErrorService');
   }
 }
 

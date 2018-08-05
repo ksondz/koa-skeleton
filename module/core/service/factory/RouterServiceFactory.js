@@ -1,4 +1,4 @@
-// core/service/factory/RouterServiceFactory.js
+
 
 const Router = require('koa-router');
 
@@ -11,19 +11,15 @@ class RouterServiceFactory extends FactoryInterface {
 
 
   /**
-   * @param app
+   * @param serviceManager
    * @return {RouterService}
    */
-  constructor(app) {
-
-    super(app);
-
-    const routerConfig = app.context.getAppConfig().router;
-    const { routes } = routerConfig;
+  constructor(serviceManager) {
+    super(serviceManager);
 
     const router = new Router();
 
-    return new RouterService(app, routes, router);
+    return new RouterService(router, serviceManager);
   }
 }
 

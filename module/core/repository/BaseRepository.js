@@ -1,4 +1,3 @@
-// core/repository/BaseRepository.js
 
 
 class BaseRepository {

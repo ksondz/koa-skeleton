@@ -1,4 +1,4 @@
-// error/response/MethodNotAllowedResponse.js
+
 
 const BaseResponse = require('./BaseResponse');
 

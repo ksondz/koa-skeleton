@@ -1,4 +1,3 @@
-// core/server/controllers/AbstractController.js
 
 
 class AbstractController {
@@ -35,10 +34,12 @@ class AbstractController {
   /**
    * @param modelService
    * @param validatorService
+   * @param errorService
    */
-  constructor(modelService, validatorService) {
+  constructor(modelService, validatorService, errorService) {
     this.modelService = modelService;
     this.validatorService = validatorService;
+    this.errorService = errorService;
   }
 
 
@@ -53,7 +54,7 @@ class AbstractController {
    * @return ErrorService
    */
   getErrorService() {
-    return this.getValidatorService().getErrorService();
+    return this.errorService;
   }
 
   /**

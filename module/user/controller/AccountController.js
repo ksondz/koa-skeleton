@@ -1,4 +1,4 @@
-// user/controllers/AccountController.js
+
 
 const AbstractController = require('../../core/controller/AbstractController');
 const UserStateEnum = require('./../../user/enum/UserStateEnum');
@@ -12,10 +12,11 @@ class AccountController extends AbstractController {
   /**
    * @param modelService
    * @param validatorService
+   * @param errorService
    * @param authService
    */
-  constructor(modelService, validatorService, authService) {
-    super(modelService, validatorService);
+  constructor(modelService, validatorService, errorService, authService) {
+    super(modelService, validatorService, errorService);
 
     this.authService = authService;
   }

@@ -1,4 +1,3 @@
-// auth/service/factory/RoleResolverServiceFactory.js
 
 
 const FactoryInterface = require('../../../core/factory/FactoryInterface');
@@ -10,12 +9,12 @@ class RoleResolverServiceFactory extends FactoryInterface {
 
 
   /**
-   * @param app
+   * @param serviceManager
    * @return {RoleResolverService}
    */
-  constructor(app) {
+  constructor(serviceManager) {
 
-    super(app);
+    super(serviceManager);
 
     const errorService = this.getServiceManager().get('ErrorService');
 

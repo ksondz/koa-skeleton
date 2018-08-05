@@ -1,4 +1,4 @@
-// auth/service/AuthService.js
+
 
 const { sign, verify } = require('jsonwebtoken');
 
@@ -43,15 +43,13 @@ class AuthService {
   /**
    * @param errorService
    * @param modelService
-   * @param secret
-   * @param options
+   * @param jwtConfig
    */
-  constructor(errorService, modelService, secret, options) {
+  constructor(errorService, modelService, jwtConfig) {
     this.errorService = errorService;
     this.modelService = modelService;
 
-    this.secret = secret;
-    this.options = options;
+    this.jwtConfig = jwtConfig;
 
     this.authorization = this.authorization.bind(this);
   }
@@ -65,8 +63,8 @@ class AuthService {
 
     const extractedUser = this.getUserExtractor().extract(user);
 
-    options = options || this.options;
-    return sign(extractedUser, this.secret, options);
+    options = options || this.jwtConfig.options;
+    return sign(extractedUser, this.jwtConfig.secret, options);
   }
 
   /**
@@ -84,7 +82,7 @@ class AuthService {
 
       const authToken = authorizationHeader.replace('Bearer ', '');
 
-      await verify(authToken, this.secret, async (err) => {
+      await verify(authToken, this.jwtConfig.secret, async (err) => {
         if (err) {
           throw this.getErrorService().createNotAuthorizedError(err.message);
         }

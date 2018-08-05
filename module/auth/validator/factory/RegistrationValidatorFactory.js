@@ -1,4 +1,4 @@
-// auth/validator/factory/ForgotValidatorFactory.js
+
 
 const FactoryInterface = require('../../../core/factory/FactoryInterface');
 
@@ -9,12 +9,12 @@ class RegistrationValidatorFactory extends FactoryInterface {
 
 
   /**
-   * @param app
+   * @param serviceManager
    * @return {RegistrationValidator}
    */
-  constructor(app) {
+  constructor(serviceManager) {
 
-    super(app);
+    super(serviceManager);
 
     const errorService = this.getServiceManager().get('ErrorService');
     const modelService = this.getServiceManager().get('ModelService');

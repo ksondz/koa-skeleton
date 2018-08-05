@@ -1,10 +1,11 @@
-// core/service/factory/ModelServiceFactory.js
+
 
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 
 const FactoryInterface = require('./../../factory/FactoryInterface');
+const Application = require('./../../../Application');
 
 const ModelService = require('./../ModelService');
 
@@ -13,12 +14,12 @@ class ModelServiceFactory extends FactoryInterface {
 
 
   /**
-   * @param app
+   * @param serviceManager
    * @return {ModelService}
    */
-  constructor(app) {
+  constructor(serviceManager) {
 
-    super(app);
+    super(serviceManager);
 
     const models = this.getModels();
     const sequelize = this.getSequelize();
@@ -36,26 +37,21 @@ class ModelServiceFactory extends FactoryInterface {
 
     const sequelize = this.getSequelize();
 
-    const moduleFolderPath = this.getAppConfig().modulePath;
+    fs.readdirSync(Application.MODULE_PATH)
+      .filter(moduleName => (moduleName.indexOf('.') !== 0))
+      .forEach((moduleName) => {
+        const modelPath = `${Application.MODULE_PATH}/${moduleName}/model`;
 
-    fs.readdirSync(this.getAppConfig().modulePath).filter(file => ((file.indexOf('.') !== 0))).forEach((moduleName) => {
+        if (fs.existsSync(modelPath)) {
 
-      const modelPath = `${moduleFolderPath}/${moduleName}/model`;
-
-      if (fs.existsSync(modelPath)) {
-
-        const modelFiles = fs.readdirSync(modelPath).filter(file => (
-          (file.indexOf('.') !== 0) && (file.slice(-3) === '.js')
-        ));
-
-        modelFiles.forEach((file) => {
-
-          const model = sequelize.import(path.join(modelPath, file));
-
-          models[model.name] = model;
-        });
-      }
-    });
+          fs.readdirSync(modelPath)
+            .filter(modelName => (((modelName.indexOf('.') !== 0) && (modelName.slice(-3) === '.js'))))
+            .forEach((modelName) => {
+              const model = sequelize.import(path.join(modelPath, modelName));
+              models[model.name] = model;
+            });
+        }
+      });
 
     return models;
   }
@@ -66,7 +62,8 @@ class ModelServiceFactory extends FactoryInterface {
    */
   getSequelize() {
     if (!this.sequelize) {
-      this.sequelize = new Sequelize(this.getDBConfig().database, this.getDBConfig().username, this.getDBConfig().password, this.getDBConfig());
+      const dbConfig = this.getDBConfig();
+      this.sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, dbConfig);
     }
 
     return this.sequelize;
@@ -76,7 +73,7 @@ class ModelServiceFactory extends FactoryInterface {
    * @return {*}
    */
   getDBConfig() {
-    return this.getAppConfig().db;
+    return this.getConfig().db;
   }
 
 }

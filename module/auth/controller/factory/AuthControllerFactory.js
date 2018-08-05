@@ -1,4 +1,3 @@
-// auth/controller/factory/RestControllerFactory.js
 
 
 const FactoryInterface = require('./../../../core/factory/FactoryInterface');
@@ -11,20 +10,21 @@ class AuthControllerFactory extends FactoryInterface {
 
 
   /**
-   * @param app
+   * @param serviceManager
    * @return {AuthController}
    */
-  constructor(app) {
+  constructor(serviceManager) {
 
-    super(app);
+    super(serviceManager);
 
-    const modelService = this.getServiceManager().get('ModelService');
-    const validatorService = this.getServiceManager().get('ValidatorService');
-    const cryptoService = this.getServiceManager().get('CryptoService');
-    const mailService = this.getServiceManager().get('MailService');
-    const authService = this.getServiceManager().get('AuthService');
+    const modelService = serviceManager.get('ModelService');
+    const errorService = serviceManager.get('ErrorService');
+    const validatorService = serviceManager.get('ValidatorService');
+    const cryptoService = serviceManager.get('CryptoService');
+    const mailService = serviceManager.get('MailService');
+    const authService = serviceManager.get('AuthService');
 
-    return new AuthController(modelService, validatorService, cryptoService, mailService, authService, moment);
+    return new AuthController(modelService, errorService, validatorService, cryptoService, mailService, authService, moment);
   }
 }
 

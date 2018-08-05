@@ -1,4 +1,4 @@
-// core/service/factory/ValidatorServiceFactory.js
+
 
 const FactoryInterface = require('./../../factory/FactoryInterface');
 
@@ -9,16 +9,14 @@ class ValidatorServiceFactory extends FactoryInterface {
 
 
   /**
-   * @param app
+   * @param serviceManager
    * @return {ValidatorService}
    */
-  constructor(app) {
+  constructor(serviceManager) {
 
-    super(app);
+    super(serviceManager);
 
-    const { validators } = this.getAppConfig();
-
-    return new ValidatorService(app, validators);
+    return new ValidatorService(serviceManager);
   }
 }
 

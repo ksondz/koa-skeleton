@@ -1,4 +1,4 @@
-// auth/validator/factory/LoginValidatorFactory.js
+
 
 const FactoryInterface = require('../../../core/factory/FactoryInterface');
 
@@ -9,12 +9,12 @@ class LoginValidatorFactory extends FactoryInterface {
 
 
   /**
-   * @param app
+   * @param serviceManager
    * @return {LoginValidator}
    */
-  constructor(app) {
+  constructor(serviceManager) {
 
-    super(app);
+    super(serviceManager);
 
     const errorService = this.getServiceManager().get('ErrorService');
     const modelService = this.getServiceManager().get('ModelService');
