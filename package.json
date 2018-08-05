@@ -56,11 +56,9 @@
     "mime": "^2.2.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.20.1",
-    "node-exiftool": "^2.3.0",
     "nodemailer": "^4.4.2",
     "passport-github": "^1.1.0",
     "path": "^0.12.7",
-    "pdf-image": "^1.0.5",
     "pg": "^7.4.0",
     "sequelize": "^4.28.6",
     "sequelize-cli": "^3.2.0"
