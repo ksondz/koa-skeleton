@@ -6,14 +6,14 @@ class BaseRoute {
   /**
    * @param router
    * @param routerConfig
-   * @param controllerService
+   * @param controllerManager
    * @param roleResolverService
    */
-  constructor(router, routerConfig, controllerService, roleResolverService) {
+  constructor(router, routerConfig, controllerManager, roleResolverService) {
     this.router = router;
     this.routerConfig = routerConfig;
 
-    this.controllerService = controllerService;
+    this.controllerManager = controllerManager;
     this.roleResolverService = roleResolverService;
   }
 
@@ -59,10 +59,19 @@ class BaseRoute {
   }
 
   /**
-   * @return {ControllerService}
+   * @return {controllerManager}
    */
-  getControllerService() {
-    return this.controllerService;
+  getControllerManager() {
+    return this.controllerManager;
+  }
+
+  /**
+   * @param controllerName
+   * @return {*}
+   */
+  getControllerActions(controllerName) {
+    const controller = this.getControllerManager().get(controllerName);
+    return controller.getActions();
   }
 }
 

@@ -37,21 +37,18 @@ class ModelServiceFactory extends FactoryInterface {
 
     const sequelize = this.getSequelize();
 
-    fs.readdirSync(Application.MODULE_PATH)
-      .filter(moduleName => (moduleName.indexOf('.') !== 0))
-      .forEach((moduleName) => {
-        const modelPath = `${Application.MODULE_PATH}/${moduleName}/model`;
+    Application.getModulePaths().forEach((modulePath) => {
+      const modelPath = path.join(modulePath, 'model');
 
-        if (fs.existsSync(modelPath)) {
+      if (fs.existsSync(modelPath)) {
 
-          fs.readdirSync(modelPath)
-            .filter(modelName => (((modelName.indexOf('.') !== 0) && (modelName.slice(-3) === '.js'))))
-            .forEach((modelName) => {
-              const model = sequelize.import(path.join(modelPath, modelName));
-              models[model.name] = model;
-            });
-        }
-      });
+        fs.readdirSync(modelPath).filter(modelName => ((modelName.indexOf('.') !== 0) && (modelName.slice(-3) === '.js')))
+          .forEach((modelName) => {
+            const model = sequelize.import(path.join(modelPath, modelName));
+            models[model.name] = model;
+          });
+      }
+    });
 
     return models;
   }

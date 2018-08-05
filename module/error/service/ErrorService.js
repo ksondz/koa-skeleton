@@ -16,6 +16,8 @@ class ErrorService {
 
   constructor() {
 
+    this.defaultServerErrorMessage = 'Internal server error';
+
     this.status = {
       badRequest: BaseResponse.BAD_REQUEST_STATUS,
       forbidden: BaseResponse.FORBIDDEN_STATUS,
@@ -24,7 +26,6 @@ class ErrorService {
       notFound: BaseResponse.NOT_FOUND_STATUS,
       validation: BaseResponse.VALIDATION_STATUS,
     };
-
 
     /**
      * @type {Promise<void>}
@@ -56,11 +57,10 @@ class ErrorService {
         default:
           ctx.status = BaseResponse.SERVER_STATUS;
           ctx.body = {
-            message: err.message || 'Internal server error',
+            message: err.message || this.defaultServerErrorMessage,
           };
 
-          this.app.emit('error', err, ctx);
-
+          ctx.throw(ctx.status, ctx.body);
           break;
       }
 

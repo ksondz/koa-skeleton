@@ -2,15 +2,15 @@
 
 const FactoryInterface = require('../../../core/factory/FactoryInterface');
 
-const AuthService = require('./../AuthService');
+const OAuthService = require('./../OAuthService');
 
 
-class AuthServiceFactory extends FactoryInterface {
+class OAuthServiceFactory extends FactoryInterface {
 
 
   /**
    * @param serviceManager
-   * @return {AuthService}
+   * @return {OAuthService}
    */
   constructor(serviceManager) {
 
@@ -19,8 +19,8 @@ class AuthServiceFactory extends FactoryInterface {
     const errorService = this.getServiceManager().get('ErrorService');
     const modelService = this.getServiceManager().get('ModelService');
 
-    return new AuthService(errorService, modelService, this.getConfig().jwt);
+    return new OAuthService(errorService, modelService, this.getConfig().jwt);
   }
 }
 
-module.exports = AuthServiceFactory;
+module.exports = OAuthServiceFactory;

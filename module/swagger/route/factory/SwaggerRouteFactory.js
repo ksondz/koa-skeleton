@@ -18,11 +18,11 @@ class SwaggerRouteFactory extends FactoryInterface {
 
     super(serviceManager);
 
-    const controllerService = serviceManager.get('ControllerService');
+    const controllerManager = serviceManager.get('ControllerManager');
     const roleResolverService = serviceManager.get('RoleResolverService');
     const RouterService = serviceManager.get('RouterService');
 
-    return new SwaggerRoute(RouterService.getRouter(), RouterService.getRouterConfig(), controllerService, roleResolverService, koaSwagger, this.getSwaggerConfig());
+    return new SwaggerRoute(RouterService.getRouter(), RouterService.getRouterConfig(), controllerManager, roleResolverService, koaSwagger, this.getSwaggerConfig());
   }
 
 

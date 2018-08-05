@@ -3,11 +3,11 @@
 module.exports = {
   service_manager: {
     services: {
-      ValidatorService: require('..//service/factory/ValidatorServiceFactory'),
-      ModelService: require('..//service/factory/ModelServiceFactory'),
-      RouterService: require('..//service/factory/RouterServiceFactory'),
-      ControllerService: require('..//service/factory/ControllerServiceFactory'),
+      ValidatorManager: require('../service/manager/factory/ValidatorManagerFactory'),
+      ControllerManager: require('../service/manager/factory/ControllerManagerFactory'),
 
+      ModelService: require('../service/factory/ModelServiceFactory'),
+      RouterService: require('../service/factory/RouterServiceFactory'),
       MailService: require('../../core/service/factory/MailServiceFactory'),
     },
 

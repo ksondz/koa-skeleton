@@ -3,17 +3,15 @@
 const BaseRoute = require('../../core/route/BaseRoute');
 
 
-class AuthRoute extends BaseRoute {
+class OAuthRoute extends BaseRoute {
 
 
   init() {
-
     const baseApiPath = this.getApiPath();
+    const controllerActions = this.getControllerActions('OAuthController');
 
-    const authController = this.getControllerService().get('AuthController');
-    const controllerActions = authController.getActions();
-
-    this.getRouter().post(`${baseApiPath}/auth`, controllerActions.auth)
+    this.getRouter()
+      .post(`${baseApiPath}/oauth`, controllerActions.oauth)
       .get(`${baseApiPath}/logout`, this.getRoleResolverService().isAuthorized, controllerActions.logout)
       .post(`${baseApiPath}/signup`, controllerActions.signUp)
       .post(`${baseApiPath}/forgot-password`, controllerActions.forgotPassword)
@@ -23,4 +21,4 @@ class AuthRoute extends BaseRoute {
 }
 
 
-module.exports = AuthRoute;
+module.exports = OAuthRoute;

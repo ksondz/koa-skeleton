@@ -17,11 +17,11 @@ class AccountControllerFactory extends FactoryInterface {
     super(serviceManager);
 
     const modelService = this.getServiceManager().get('ModelService');
-    const validatorService = this.getServiceManager().get('ValidatorService');
-    const errorService = this.getServiceManager().get('errorService');
-    const authService = this.getServiceManager().get('AuthService');
+    const validatorManager = this.getServiceManager().get('ValidatorManager');
+    const errorService = this.getServiceManager().get('ErrorService');
+    const oauthService = this.getServiceManager().get('OAuthService');
 
-    return new AccountController(modelService, validatorService, errorService, authService);
+    return new AccountController(modelService, validatorManager, errorService, oauthService);
   }
 }
 

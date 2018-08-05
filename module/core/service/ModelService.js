@@ -18,8 +18,8 @@ class ModelService {
 
     this.initModelsRepositories();
     this.initModelsExtractors();
+    this.initModelsAssociations();
   }
-
 
   /**
    * @param name
@@ -33,14 +33,12 @@ class ModelService {
     return this.getModels()[name];
   }
 
-
   /**
    * @private
    */
   initModelsRepositories() {
 
     Object.keys(this.models).forEach((modelName) => {
-
       const model = this.get(modelName);
 
       const ModelRepository = model.repository;
@@ -52,18 +50,30 @@ class ModelService {
     });
   }
 
-
   /**
    * @private
    */
   initModelsExtractors() {
 
     Object.keys(this.models).forEach((modelName) => {
-
       const model = this.get(modelName);
 
       const ModelExtractor = model.extractor;
       model.extractor = ModelExtractor ? new ModelExtractor(model) : new DefaultExtractor(model);
+
+      model.getExtractor = () => {
+        return model.extractor;
+      };
+    });
+  }
+
+  /**
+   * @private
+   */
+  initModelsAssociations() {
+
+    Object.keys(this.models).forEach((modelName) => {
+      const model = this.get(modelName);
 
       if (Object.prototype.hasOwnProperty.call(model.options, 'associate')) {
         model.options.associate(this.models);
@@ -71,6 +81,25 @@ class ModelService {
     });
   }
 
+  /**
+   * @param callback
+   * @return {Promise<*>}
+   */
+  async runTransaction(callback) {
+    const transaction = await this.getSequelize().transaction();
+
+    try {
+      const result = await callback();
+
+      await transaction.commit();
+
+      return result;
+
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
+  }
 
   /**
    * @return {*}
@@ -78,7 +107,6 @@ class ModelService {
   getSequelize() {
     return this.sequelize;
   }
-
 
   /**
    * @return {{}|*|Array}

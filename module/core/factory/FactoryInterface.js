@@ -14,7 +14,7 @@ class FactoryInterface {
    * @return {*}
    */
   getConfig() {
-    return this.getServiceManager().getConfig();
+    return this.getServiceManager().get('Config');
   }
 
   /**

@@ -32,13 +32,13 @@ class AbstractController {
 
 
   /**
+   * @param validatorManager
    * @param modelService
-   * @param validatorService
    * @param errorService
    */
-  constructor(modelService, validatorService, errorService) {
+  constructor(validatorManager, modelService, errorService) {
     this.modelService = modelService;
-    this.validatorService = validatorService;
+    this.validatorManager = validatorManager;
     this.errorService = errorService;
   }
 
@@ -65,10 +65,10 @@ class AbstractController {
   }
 
   /**
-   * @return ValidatorService
+   * @return validatorManager
    */
-  getValidatorService() {
-    return this.validatorService;
+  getValidatorManager() {
+    return this.validatorManager;
   }
 }
 

@@ -1,14 +1,14 @@
 
-const AccessTokenRepository = require('./../repository/AccessTokenRepository');
+const VerificationTokenRepository = require('./../repository/VerificationTokenRepository');
 
 const TokenTypeEnum = require('./../enum/TokenTypeEnum');
 
 
 module.exports = (sequelize, DataTypes) => {
 
-  const modelName = 'AccessToken';
+  const modelName = 'VerificationToken';
 
-  const tableName = 'access_token';
+  const tableName = 'verification_token';
 
   const schema = {
     id: {
@@ -21,16 +21,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       field: 'user_id',
       allowNull: true,
+      references: {
+        model: 'user',
+        key: 'id',
+      },
+      onDelete: 'cascade',
+    },
+    token: {
+      type: DataTypes.TEXT,
+      field: 'token',
+      allowNull: true,
     },
     type: {
       type: DataTypes.ENUM,
       field: 'type',
       values: TokenTypeEnum.getValues(),
-      allowNull: true,
-    },
-    token: {
-      type: DataTypes.TEXT,
-      field: 'token',
+      defaultValue: TokenTypeEnum.ACCESS_TOKEN_TYPE,
       allowNull: true,
     },
     expiredAt: {
@@ -46,31 +52,22 @@ module.exports = (sequelize, DataTypes) => {
     tableName,
     timestamps: true,
     associate: (models) => {
-      const { User } = models;
-      AccessToken.belongsTo(User, { as: 'User', foreignKey: 'user_id' });
+      const { VerificationToken, User } = models;
+      VerificationToken.belongsTo(User, { as: 'User', foreignKey: 'user_id' });
     },
   };
 
   const extractProperties = [
-    'id',
-    'email',
-    'userName',
-    'role',
-    'firstName',
-    'lastName',
-    'description',
+    'token',
+    'type',
+    'expiredAt',
+    'createdAt',
   ];
 
+  const VerificationToken = sequelize.define(modelName, schema, options);
 
-  const AccessToken = sequelize.define(modelName, schema, options);
+  VerificationToken.repository = VerificationTokenRepository;
+  VerificationToken.extractProperties = extractProperties;
 
-  AccessToken.repository = AccessTokenRepository;
-  AccessToken.extractProperties = extractProperties;
-
-
-  // User.isExpired = () => {
-  //   return this.expiredAt >
-  // };
-
-  return AccessToken;
+  return VerificationToken;
 };

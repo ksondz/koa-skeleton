@@ -5,25 +5,23 @@ const TokenTypeEnum = require('./../enum/TokenTypeEnum');
 const UserStateEnum = require('./../../user/enum/UserStateEnum');
 
 
-class AuthController extends AbstractController {
+class OAuthController extends AbstractController {
 
 
   /**
+   * @param validatorManager
    * @param modelService
-   * @param validatorService
    * @param errorService
+   * @param oauthService
    * @param cryptoService
    * @param mailService
-   * @param authService
-   * @param moment
    */
-  constructor(modelService, validatorService, errorService, cryptoService, mailService, authService, moment) {
-    super(modelService, validatorService, errorService);
+  constructor(validatorManager, modelService, errorService, oauthService, cryptoService, mailService) {
+    super(validatorManager, modelService, errorService);
 
+    this.oauthService = oauthService;
     this.cryptoService = cryptoService;
     this.mailService = mailService;
-    this.authService = authService;
-    this.moment = moment;
   }
   
   
@@ -32,7 +30,7 @@ class AuthController extends AbstractController {
    */
   getActions() {
     return {
-      auth: this.authAction.bind(this),
+      oauth: this.oauthAction.bind(this),
       logout: this.logoutAction.bind(this),
       signUp: this.signUpAction.bind(this),
       forgotPassword: this.forgotPasswordAction.bind(this),
@@ -46,48 +44,57 @@ class AuthController extends AbstractController {
    * @param next
    * @return {Promise<void>}
    */
-  async authAction(ctx, next) {
+  async oauthAction(ctx, next) {
+    const typeValidatedData = await this.getValidatorManager().get('OAuthTypeValidator').validate(ctx.request.body);
 
-    const AuthValidator = this.getValidatorService().get('AuthValidator');
-
-    const validatedData = await AuthValidator.validate(ctx.request.body);
-
-    let user;
-
-    if (validatedData.type === TokenTypeEnum.REFRESH_TOKEN_TYPE) {
-
-      const refreshToken = await this.getAccessTokenRepository().findRefreshToken(validatedData.refreshToken);
-      await refreshToken.destroy();
-
-      user = await this.getUserRepository().findById(refreshToken.userId);
+    if (typeValidatedData.type === TokenTypeEnum.REFRESH_TOKEN_TYPE) {
+      ctx.body = this.refreshToken(ctx.request.body);
     } else {
-      user = await this.getUserRepository().findByEmail(validatedData.username);
+      ctx.body = await this.authenticate(ctx.request.body);
     }
-
-    const userTokens = await this.getAccessTokenRepository().findUserAccessTokens(user.id);
-    await userTokens.forEach(async (userToken) => {
-      // TODO: move this condition inside AccessToken model
-      if (userToken.createdAt < new Date(Date.now() - 7200000000)) {
-        await userToken.destroy();
-      }
-    });
-
-    // TODO: move it inside AccessToken model. We can use factory method for this type
-    const newAccessToken = await this.getAccessTokenRepository().create({
-      userId: user.id,
-      token: this.authService.generateToken(user),
-      type: TokenTypeEnum.ACCESS_TOKEN_TYPE,
-      expDate: this.moment().add(100, 'days').format(),
-    });
-
-    const userResponse = await this.getUserModel().extractor.extract(user);
-
-    ctx.body = {
-      token: newAccessToken.token,
-      user: userResponse,
-    };
   }
 
+  /**
+   * @param requestBody
+   * @return {Promise<{accessToken, refreshToken}>}
+   */
+  async refreshToken(requestBody) {
+    const validatedData = await this.getValidatorManager().get('OAuthRefreshTokenValidator').validate(requestBody);
+    const refreshToken = await this.getVerificationTokenRepository().findRefreshTokenByToken(validatedData.token);
+
+    if (!refreshToken) {
+      throw this.getErrorService().createForbiddenError();
+    }
+    const user = await refreshToken.getUser();
+
+    const result = await this.getModelService().runTransaction(async () => {
+
+      await this.oauthService.cleanUserAccessTokens(user);
+      await refreshToken.destroy();
+
+      const userAccessToken = await this.oauthService.createUserAccessToken(user);
+      const userRefreshToken = await this.oauthService.createUserRefreshToken(user);
+
+      return {
+        accessToken: await this.getVerificationTokenExtractor.extract(userAccessToken),
+        refreshToken: await this.getVerificationTokenExtractor.extract(userRefreshToken),
+      };
+    });
+
+    return result || {};
+  }
+
+  /**
+   * @param requestBody
+   * @return {Promise<{}>}
+   */
+  async authenticate(requestBody) {
+    const validatedData = await this.getValidatorManager().get('OAuthValidator').validate(requestBody);
+    const user = await this.getUserRepository().findByEmail(validatedData.username);
+
+    const extractedAccessToken = await this.getVerificationTokenExtractor.extract(this.oauthService.createUserAccessToken(user));
+    return extractedAccessToken || {};
+  }
 
   /**
    * @param ctx
@@ -96,7 +103,7 @@ class AuthController extends AbstractController {
    */
   async signUpAction(ctx, next) {
 
-    const RegistrationValidator = this.getValidatorService().get('RegistrationValidator');
+    const RegistrationValidator = this.getValidatorManager().get('RegistrationValidator');
 
     const userData = await RegistrationValidator.validate(ctx.request.body);
 
@@ -121,7 +128,7 @@ class AuthController extends AbstractController {
    */
   async forgotPasswordAction(ctx, next) {
 
-    const ForgotPasswordValidator = this.getValidatorService().get('ForgotPasswordValidator');
+    const ForgotPasswordValidator = this.getValidatorManager().get('ForgotPasswordValidator');
 
     const validateData = await ForgotPasswordValidator.validate(ctx.request.body);
 
@@ -150,7 +157,7 @@ class AuthController extends AbstractController {
 
     const token = ctx.request.body.token.trim();
 
-    const PasswordValidator = this.getValidatorService().get('PasswordValidator');
+    const PasswordValidator = this.getValidatorManager().get('PasswordValidator');
     const validateData = await PasswordValidator.validate(ctx.request.body);
 
     const user = await this.getUserRepository().findUserByForgotToken(token);
@@ -237,36 +244,23 @@ class AuthController extends AbstractController {
   /**
    * @return {*}
    */
-  getAccessTokenRepository() {
-    return this.getModelService().get('AccessToken').getRepository();
+  getVerificationTokenRepository() {
+    return this.getModelService().get('VerificationToken').getRepository();
+  }
+
+  /**
+   * @return {*}
+   */
+  getVerificationTokenExtractor() {
+    return this.getModelService().get('VerificationToken').getExtractor();
   }
 
   /**
    * @return {*}
    */
   getUserRepository() {
-    return this.getUserModel().getRepository();
+    return this.getModelService().get('User').getRepository();
   }
-
-  /**
-   * @return {*}
-   */
-  getUserModel() {
-    return this.getModelService().get('User');
-  }
-
-
-  getCryptoService() {
-    return this.cryptoService;
-  }
-
-  /**
-   * @return AuthService
-   */
-  getAuthService() {
-    return this.authService;
-  }
-
 }
 
-module.exports = AuthController;
+module.exports = OAuthController;

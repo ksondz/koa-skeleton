@@ -2,15 +2,15 @@
 
 const FactoryInterface = require('../../../core/factory/FactoryInterface');
 
-const AuthValidator = require('./../AuthValidator');
+const OAuthValidator = require('./../OAuthValidator');
 
 
-class AuthValidatorFactory extends FactoryInterface {
+class OAuthValidatorFactory extends FactoryInterface {
 
 
   /**
    * @param serviceManager
-   * @return {AuthValidator}
+   * @return {OAuthValidator}
    */
   constructor(serviceManager) {
 
@@ -20,8 +20,8 @@ class AuthValidatorFactory extends FactoryInterface {
     const modelService = this.getServiceManager().get('ModelService');
     const cryptoService = this.getServiceManager().get('CryptoService');
 
-    return new AuthValidator(errorService, modelService, cryptoService);
+    return new OAuthValidator(errorService, modelService, cryptoService);
   }
 }
 
-module.exports = AuthValidatorFactory;
+module.exports = OAuthValidatorFactory;

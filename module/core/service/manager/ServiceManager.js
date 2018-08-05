@@ -5,16 +5,14 @@ const FactoryInterface = require('../../factory/FactoryInterface');
 
 class ServiceManager {
 
-
   /**
    * @param config
-   * @param configClasses
-   * @param factoryServiceManager
+   * @param parentManager
    */
-  constructor(config, configClasses, factoryServiceManager) {
+  constructor(config, parentManager) {
+
     this.config = config;
-    this.configClasses = configClasses || this.getServiceManagerConfig().services;
-    this.factoryServiceManager = factoryServiceManager || this;
+    this.creationContext = parentManager instanceof ServiceManager ? parentManager : this;
 
     this.instances = {};
   }
@@ -44,7 +42,7 @@ class ServiceManager {
    * @param InstanceClassFactory
    */
   initInstanceFactory(name, InstanceClassFactory) {
-    this.addInstance(name, new InstanceClassFactory(this.factoryServiceManager));
+    this.set(name, new InstanceClassFactory(this.creationContext));
   }
 
   /**
@@ -52,7 +50,7 @@ class ServiceManager {
    * @param InstanceClass
    */
   initInstance(name, InstanceClass) {
-    this.addInstance(name, new InstanceClass());
+    this.set(name, new InstanceClass());
   }
 
   /**
@@ -60,7 +58,7 @@ class ServiceManager {
    * @param instance
    * @return {*}
    */
-  addInstance(name, instance) {
+  set(name, instance) {
     this.getInstances()[name] = instance;
   }
 
@@ -70,11 +68,11 @@ class ServiceManager {
    */
   getInstanceClass(name) {
 
-    if (!this.getConfigClasses()[name]) {
+    if (!this.getConfig()[name]) {
       throw new TypeError(`Instance with name ${name} does not exist`);
     }
 
-    return this.getConfigClasses()[name];
+    return this.getConfig()[name];
   }
 
   /**
@@ -101,24 +99,17 @@ class ServiceManager {
   }
 
   /**
-   * Get Service Config
+   * @return {*}
    */
   getConfig() {
     return this.config;
   }
 
   /**
-   * Get Service Config
+   * @return {*}
    */
   getServiceManagerConfig() {
-    return this.config.service_manager;
-  }
-
-  /**
-   * @return {*|ECS.StringList|ECS.Services|Support.ServiceList|Health.serviceList|module.exports.service_manager.services}
-   */
-  getConfigClasses() {
-    return this.configClasses;
+    return this.get('Config').service_manager;
   }
 }
 

@@ -1,20 +1,39 @@
 
-const BaseRepository = require('../../core/repository/BaseRepository');
+const BaseRepository = require('./../../core/repository/BaseRepository');
 
 const TokenTypeEnum = require('./../enum/TokenTypeEnum');
 
 
-class AccessTokenRepository extends BaseRepository {
+class VerificationTokenRepository extends BaseRepository {
 
 
   /**
    * @param token
    * @return {Promise<*|null>}
    */
-  async findToken(token) {
+  async findRegistrationTokenByToke(token) {
 
     const result =  await super.findOne({
-      where: { token },
+      where: {
+        token,
+        type: TokenTypeEnum.REGISTER_TOKEN_TYPE,
+      },
+    });
+
+    return result || null;
+  }
+
+  /**
+   * @param token
+   * @return {Promise<*|null>}
+   */
+  async findForgotTokenByToke(token) {
+
+    const result =  await super.findOne({
+      where: {
+        token,
+        type: TokenTypeEnum.FORGOT_TOKEN_TYPE,
+      },
     });
 
     return result || null;
@@ -25,7 +44,7 @@ class AccessTokenRepository extends BaseRepository {
    * @param userId
    * @return {Promise<*>}
    */
-  async findUserAccessTokens(userId) {
+  async findUserAccessTokensByUserId(userId) {
 
     const result = await super.findAll({
       where: {
@@ -41,7 +60,7 @@ class AccessTokenRepository extends BaseRepository {
    * @param token
    * @return {Promise<*>}
    */
-  async findAccessToken(token) {
+  async findAccessTokenByToken(token) {
 
     const result = await super.findOne({
       where: {
@@ -57,7 +76,7 @@ class AccessTokenRepository extends BaseRepository {
    * @param token
    * @return {Promise<*>}
    */
-  async findRefreshToken(token) {
+  async findRefreshTokenByToken(token) {
 
     const result = await super.findOne({
       where: {
@@ -68,7 +87,6 @@ class AccessTokenRepository extends BaseRepository {
 
     return result || null;
   }
-
 }
 
-module.exports = AccessTokenRepository;
+module.exports = VerificationTokenRepository;

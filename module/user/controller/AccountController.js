@@ -3,7 +3,7 @@
 const AbstractController = require('../../core/controller/AbstractController');
 const UserStateEnum = require('./../../user/enum/UserStateEnum');
 const UserRoleEnum = require('./../../user/enum/UserRoleEnum');
-const TokenTypeEnum = require('./../../auth/enum/TokenTypeEnum');
+const TokenTypeEnum = require('../../oauth/enum/TokenTypeEnum');
 const moment = require('moment');
 
 class AccountController extends AbstractController {
@@ -11,14 +11,14 @@ class AccountController extends AbstractController {
 
   /**
    * @param modelService
-   * @param validatorService
+   * @param validatorManager
    * @param errorService
-   * @param authService
+   * @param oauthService
    */
-  constructor(modelService, validatorService, errorService, authService) {
-    super(modelService, validatorService, errorService);
+  constructor(modelService, validatorManager, errorService, oauthService) {
+    super(modelService, validatorManager, errorService);
 
-    this.authService = authService;
+    this.oauthService = oauthService;
   }
 
   /**
@@ -62,7 +62,7 @@ class AccountController extends AbstractController {
 
     const newToken = await this.getAccessTokenRepository().create({
       userId: userModel.id,
-      token: this.authService.generateToken(userModel),
+      token: this.oauthService.generateToken(userModel),
       type: TokenTypeEnum.ACCESS_TOKEN_TYPE,
       expDate: moment().add(100, 'days').format(),
     });
@@ -87,7 +87,7 @@ class AccountController extends AbstractController {
 
     const validatorName = (state.role === UserRoleEnum.TEACHER_USER_ROLE) ? 'Patch/TeacherAccountValidator' : 'Patch/StudentAccountValidator';
 
-    const accountValidator = this.getValidatorService().get(validatorName);
+    const accountValidator = this.getValidatorManager().get(validatorName);
     const accountPatchData = await accountValidator.validate(ctx.request.body, state.user);
 
     const updatedUserModel =  await this.getUserRepository().update(state.user.id, accountPatchData);

@@ -6,26 +6,60 @@ const staticServer = require('koa-static-server');
 const fs = require('fs');
 const deepmerge = require('deepmerge');
 
+const appConfig = require('./../config/app.config');
+
 const ServiceManager = require('./core/service/manager/ServiceManager');
-const config = require('./../config/app.config');
 
 
 class Application {
 
+
   /**
-   * @return {string}
-   * @constructor
+   * @return {Array}
    */
-  static get MODULE_PATH() {
-    return __dirname;
+  static getModulePaths() {
+    const modulePaths = [];
+
+    fs.readdirSync(__dirname)
+      .filter(moduleName => (fs.lstatSync(`${__dirname}/${moduleName}`).isDirectory()))
+      .forEach((moduleName) => {
+        modulePaths.push(`${__dirname}/${moduleName}`);
+      });
+
+    return modulePaths;
   }
+
+  /**
+   * @return {*}
+   */
+  static getModuleConfigs() {
+    let moduleConfigs = {};
+
+    Application.getModulePaths().forEach((modulePath) => {
+      const moduleConfigPath = `${modulePath}/config`;
+
+      fs.readdirSync(moduleConfigPath)
+        .filter(fileName => (fileName.slice(-9) === 'config.js'))
+        .forEach((fileName) => {
+          const moduleConfig = require(`${moduleConfigPath}/${fileName}`);
+          moduleConfigs = deepmerge.all([moduleConfigs, moduleConfig]);
+        });
+    });
+
+    return moduleConfigs;
+  }
+
 
   /**
    * Create new application instance and initialize modules configs
    */
   constructor() {
     this.app = new Koa();
-    this.initModulesConfigs();
+
+    const moduleConfig = Application.getModuleConfigs();
+    const serviceManager = this.initServiceManager(moduleConfig.service_manager.services);
+
+    serviceManager.set('Config', deepmerge.all([appConfig, moduleConfig]));
   }
 
   /**
@@ -49,87 +83,39 @@ class Application {
     this.getApp().use(this.getRouterService().getCors());
     this.getApp().use(this.getRouterService().getBodyParser());
 
-    this.getApp().use(this.getAuthService().authorization);
+    this.getApp().use(this.getOAuthService().authorization);
 
     this.getApp().use(await this.getRouterService().getRoutes());
 
     this.getApp().use(staticServer(this.getConfig().staticServer));
   }
 
-  initModulesConfigs() {
-
-    try {
-
-      fs.readdirSync(Application.MODULE_PATH)
-        .filter(moduleName => ((moduleName.indexOf('.') !== 0)))
-        .forEach((moduleName) => {
-          const modulePath = `${Application.MODULE_PATH}/${moduleName}`;
-
-          if (fs.lstatSync(modulePath).isDirectory()) {
-            this.mergeModuleConfigs(`${modulePath}/config`);
-          }
-        });
-
-      this.getContext().getConfig = () => {
-        return this.getConfig();
-      };
-
-    } catch (e) {
-      console.error(e);
-      throw e;
-    }
-  }
-
   /**
-   * @param moduleConfigPath
+   * @param config
+   * @return {ServiceManager}
    */
-  mergeModuleConfigs(moduleConfigPath) {
+  initServiceManager(config) {
+    const serviceManager = new ServiceManager(config);
 
-    fs.readdirSync(moduleConfigPath)
-      .filter(fileName => (fileName.slice(-9) === 'config.js'))
-      .forEach((fileName) => {
-        this.config = deepmerge.all([this.getConfig(), require(`${moduleConfigPath}/${fileName}`)]);
-      });
-  }
+    this.getContext().getServiceManager = () => {
+      return serviceManager;
+    };
 
-  /**
-   * @return {*}
-   */
-  getConfig() {
-
-    if (!this.config) {
-      this.config = config;
-    }
-
-    return this.config;
-  }
-
-  /**
-   * @return {*}
-   */
-  getContext() {
-    return this.getApp().context;
-  }
-
-  /**
-   * @return {module.Application|*}
-   */
-  getApp() {
-    return this.app;
+    return serviceManager;
   }
 
   /**
    * @return {ServiceManager}
    */
   getServiceManager() {
-
-    if (!Object.prototype.hasOwnProperty.call(this.getContext(), 'getServiceManager')) {
-      this.getContext().getServiceManager = () => {
-        return new ServiceManager(this.getConfig());
-      };
-    }
-
     return this.getContext().getServiceManager();
+  }
+
+  /**
+   * @return {*}
+   */
+  getConfig() {
+    return this.getServiceManager().get('Config');
   }
 
   /**
@@ -140,10 +126,10 @@ class Application {
   }
 
   /**
-   * @return {AuthService}
+   * @return {OAuthService}
    */
-  getAuthService() {
-    return this.getServiceManager().get('AuthService');
+  getOAuthService() {
+    return this.getServiceManager().get('OAuthService');
   }
 
   /**
@@ -158,6 +144,20 @@ class Application {
    */
   getModelService() {
     return this.getServiceManager().get('ModelService');
+  }
+
+  /**
+   * @return {module.Application|*}
+   */
+  getApp() {
+    return this.app;
+  }
+
+  /**
+   * @return {*}
+   */
+  getContext() {
+    return this.getApp().context;
   }
 }
 

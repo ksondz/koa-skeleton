@@ -6,9 +6,9 @@ const BaseRoute = require('../../core/route/BaseRoute');
 class SwaggerRoute extends BaseRoute {
 
 
-  constructor(router, routerConfig, controllerService, roleResolverService, koaSwagger, swaggerConfig) {
+  constructor(router, routerConfig, controllerManager, roleResolverService, koaSwagger, swaggerConfig) {
 
-    super(router, routerConfig, controllerService, roleResolverService);
+    super(router, routerConfig, controllerManager, roleResolverService);
 
     this.koaSwagger = koaSwagger;
     this.swaggerConfig = swaggerConfig;

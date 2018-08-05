@@ -6,19 +6,19 @@ const BaseEnum = require('../../core/enum/BaseEnum');
 class TokenTypeEnum extends BaseEnum {
 
   static get ACCESS_TOKEN_TYPE() {
-    return 'accessToken';
+    return 'access_token';
   }
 
   static get REFRESH_TOKEN_TYPE() {
-    return 'refreshToken';
+    return 'refresh_token';
   }
 
   static get REGISTER_TOKEN_TYPE() {
-    return 'registerToken';
+    return 'register_token';
   }
 
   static get FORGOT_TOKEN_TYPE() {
-    return 'forgotToken';
+    return 'forgot_token';
   }
 
   static getValues() {

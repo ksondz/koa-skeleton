@@ -11,7 +11,7 @@ class AccountRoute extends BaseRoute {
 
     const accountPath = this.getApiPath('/account');
 
-    const accountController = this.getControllerService().get('AccountController');
+    const accountController = this.getControllerManager().get('AccountController');
     const controllerActions = accountController.getActions();
 
     this.router

@@ -51,7 +51,7 @@ class RouterService {
       return new InstanceClass(this.getServiceManager());
     }
 
-    return new InstanceClass(this.router, this.getRouterConfig(), this.getControllerService(), this.getRoleResolverService());
+    return new InstanceClass(this.router, this.getRouterConfig(), this.getControllerManager(), this.getRoleResolverService());
   }
 
   /**
@@ -66,7 +66,7 @@ class RouterService {
    * @return {*}
    */
   getRouterConfig() {
-    return this.getServiceManager().getConfig().router;
+    return this.getConfig().router;
   }
 
   /**
@@ -93,8 +93,15 @@ class RouterService {
   /**
    * @return {*}
    */
-  getControllerService() {
-    return this.getServiceManager().get('ControllerService');
+  getConfig() {
+    return this.getServiceManager().get('Config');
+  }
+
+  /**
+   * @return {*}
+   */
+  getControllerManager() {
+    return this.getServiceManager().get('ControllerManager');
   }
 
   /**
