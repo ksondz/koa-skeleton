@@ -17,7 +17,7 @@ class ControllerManager extends ServiceManager {
    * @return {*}
    */
   getErrorService() {
-    return this.serviceManager.get('ErrorService');
+    return this.getCreationContext().get('ErrorService');
   }
 }
 

@@ -31,10 +31,10 @@ class OAuthController extends AbstractController {
   getActions() {
     return {
       oauth: this.oauthAction.bind(this),
-      logout: this.logoutAction.bind(this),
       signUp: this.signUpAction.bind(this),
       forgotPassword: this.forgotPasswordAction.bind(this),
       updateForgotPassword: this.updateForgotPasswordAction.bind(this),
+      logout: this.logoutAction.bind(this),
     };
   }
 
@@ -76,8 +76,8 @@ class OAuthController extends AbstractController {
       const userRefreshToken = await this.oauthService.createUserRefreshToken(user);
 
       return {
-        accessToken: await this.getVerificationTokenExtractor.extract(userAccessToken),
-        refreshToken: await this.getVerificationTokenExtractor.extract(userRefreshToken),
+        accessToken: await this.getVerificationTokenExtractor().extract(userAccessToken),
+        refreshToken: await this.getVerificationTokenExtractor().extract(userRefreshToken),
       };
     });
 
@@ -92,7 +92,9 @@ class OAuthController extends AbstractController {
     const validatedData = await this.getValidatorManager().get('OAuthValidator').validate(requestBody);
     const user = await this.getUserRepository().findByEmail(validatedData.username);
 
-    const extractedAccessToken = await this.getVerificationTokenExtractor.extract(this.oauthService.createUserAccessToken(user));
+    const userAccessToken = await this.oauthService.createUserAccessToken(user);
+
+    const extractedAccessToken = await this.getVerificationTokenExtractor().extract(userAccessToken);
     return extractedAccessToken || {};
   }
 

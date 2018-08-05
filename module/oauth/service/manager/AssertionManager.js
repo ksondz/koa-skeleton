@@ -19,21 +19,21 @@ class AssertionManager extends ServiceManager {
    * @return {*}
    */
   getErrorService() {
-    return this.getServiceManager().get('ErrorService');
+    return this.getCreationContext().get('ErrorService');
   }
 
   /**
    * @return {*}
    */
   getModelService() {
-    return this.getServiceManager().get('ModelService');
+    return this.getCreationContext().get('ModelService');
   }
 
   /**
    * @return {*}
    */
   getRoleResolverService() {
-    return this.getServiceManager().get('RoleResolverService');
+    return this.getCreationContext().get('RoleResolverService');
   }
 }
 

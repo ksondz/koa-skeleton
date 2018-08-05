@@ -17,4 +17,7 @@ module.exports = {
   // Your email address and password
   MAIL_USER: 'your.email.adress@gmail.com',
   MAIL_PASS: '1qaZXssW2',
+
+  JWT_SECRET: 'json_web_token_secret_key',
+  JWT_EXP: '1h',
 };

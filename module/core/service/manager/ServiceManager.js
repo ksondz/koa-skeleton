@@ -106,6 +106,13 @@ class ServiceManager {
   }
 
   /**
+   * @return {ServiceManager}
+   */
+  getCreationContext() {
+    return this.creationContext;
+  }
+
+  /**
    * @return {*}
    */
   getServiceManagerConfig() {
