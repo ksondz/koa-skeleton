@@ -12,7 +12,7 @@ class ServiceManager {
   constructor(config, parentManager) {
 
     this.config = config;
-    this.creationContext = parentManager instanceof ServiceManager ? parentManager : this;
+    this.creationContext = parentManager instanceof ServiceManager ? parentManager.creationContext : this;
 
     this.instances = {};
   }
@@ -42,7 +42,7 @@ class ServiceManager {
    * @param InstanceClassFactory
    */
   initInstanceFactory(name, InstanceClassFactory) {
-    this.set(name, new InstanceClassFactory(this.creationContext));
+    this.set(name, new InstanceClassFactory(this.getCreationContext()));
   }
 
   /**
