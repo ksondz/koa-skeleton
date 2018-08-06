@@ -18,6 +18,7 @@ class DefaultExtractor {
     this.defaultUndefinedPropertyValue = null;
   }
 
+
   /**
    * @return {*}
    */
@@ -29,6 +30,18 @@ class DefaultExtractor {
     }
 
     return extractProperties;
+  }
+
+  /**
+   * @param collection
+   * @param properties
+   * @param associations
+   * @returns {Promise<Array>}
+   */
+  async extractPaginationCollection(collection, properties = [], associations = []) {
+    collection.rows = await this.extractArray(collection.rows, properties, associations);
+
+    return collection;
   }
 
   /**
@@ -88,6 +101,7 @@ class DefaultExtractor {
     return extractedValues;
   }
 
+
   /**
    * @param resource
    * @param properties
@@ -116,6 +130,7 @@ class DefaultExtractor {
     return Object.prototype.hasOwnProperty.call(resource, propertyName) ? resource[propertyName] : this.defaultUndefinedPropertyValue;
   }
 
+
   /**
    *
    * @param resource
@@ -134,6 +149,7 @@ class DefaultExtractor {
 
     return extractedData;
   }
+
 
   /**
    * @param resource
@@ -158,6 +174,7 @@ class DefaultExtractor {
 
     return associationValue;
   }
+
 
   /**
    * @param resource

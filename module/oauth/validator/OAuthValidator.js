@@ -44,7 +44,7 @@ class OAuthValidator extends BaseValidator {
     const joiBuilder = this.getJoiBuilder();
 
     return joiBuilder.object().keys({
-      username: joiBuilder.string().required(),
+      username: joiBuilder.string().label(BaseValidator.STRING_REQUIRED_LABEL).required(),
       password: joiBuilder.string().min(4).max(15).required(),
     });
   }
