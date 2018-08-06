@@ -42,13 +42,11 @@ class BaseResponse extends Error {
     };
   }
 
-
   /**
    * @param status
    * @param message
    */
   constructor(status, message) {
-
     super();
 
     this.status = status;
@@ -58,14 +56,12 @@ class BaseResponse extends Error {
     }
   }
 
-
   /**
    * @return {*}
    */
   getStatus() {
     return this.status;
   }
-
 
   /**
    * @return {string}

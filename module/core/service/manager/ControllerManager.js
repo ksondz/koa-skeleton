@@ -10,11 +10,25 @@ class ControllerManager extends ServiceManager {
    * @param InstanceClass
    */
   initInstance(name, InstanceClass) {
-    this.set(name, new InstanceClass(this.getErrorService()));
+    this.set(name, new InstanceClass(this.getValidatorManager(), this.getModelService(), this.getErrorService()));
   }
 
   /**
-   * @return {*}
+   * @return {ValidatorManager}
+   */
+  getValidatorManager() {
+    return this.getCreationContext().get('ValidatorManager');
+  }
+
+  /**
+   * @return {ModelService}
+   */
+  getModelService() {
+    return this.getCreationContext().get('ModelService');
+  }
+
+  /**
+   * @return {ErrorService}
    */
   getErrorService() {
     return this.getCreationContext().get('ErrorService');

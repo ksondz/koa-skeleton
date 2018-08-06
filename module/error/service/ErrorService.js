@@ -15,7 +15,6 @@ class ErrorService {
 
 
   constructor() {
-
     this.defaultServerErrorMessage = 'Internal server error';
 
     this.status = {
@@ -51,6 +50,7 @@ class ErrorService {
         case (err instanceof BadRequestResponse):
         case (err instanceof MethodNotAllowedResponse):
         case (err instanceof ServerResponse):
+        case (err instanceof NotFoundResponse):
           ctx.status = err.getStatus();
           ctx.body = err.getMessage();
           break;
@@ -63,7 +63,6 @@ class ErrorService {
           ctx.throw(ctx.status, ctx.body);
           break;
       }
-
     }
   }
 
@@ -127,6 +126,14 @@ class ErrorService {
    */
   createForbiddenError(message) {
     return this._createErrorResponse(message, this.status.forbidden);
+  }
+
+  /**
+   * @param message
+   * @returns {NotFoundResponse}
+   */
+  createNotFound(message) {
+    return this._createErrorResponse(message, this.status.notFound);
   }
 }
 
