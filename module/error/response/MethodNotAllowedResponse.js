@@ -4,6 +4,7 @@ const BaseResponse = require('./BaseResponse');
 
 class MethodNotAllowedResponse extends BaseResponse {
 
+
   /**
    * @param message
    */

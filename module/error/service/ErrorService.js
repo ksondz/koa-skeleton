@@ -66,7 +66,6 @@ class ErrorService {
     }
   }
 
-
   /**
    * @param message
    * @param status
@@ -94,7 +93,6 @@ class ErrorService {
         return new ServerResponse(message);
     }
   }
-
 
   /**
    * @param message

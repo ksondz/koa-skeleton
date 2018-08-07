@@ -9,6 +9,7 @@ class FactoryInterface {
   constructor(serviceManager) {
     this.serviceManager = serviceManager;
   }
+
   
   /**
    * @return {*}

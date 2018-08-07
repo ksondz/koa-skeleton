@@ -4,6 +4,7 @@ const BaseResponse = require('./BaseResponse');
 
 class ServerResponse extends BaseResponse {
 
+
   /**
    * @param message
    */
