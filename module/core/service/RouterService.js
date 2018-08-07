@@ -51,7 +51,7 @@ class RouterService {
       return new InstanceClass(this.getServiceManager());
     }
 
-    return new InstanceClass(this.router, this.getRouterConfig(), this.getControllerManager(), this.getRoleResolverService());
+    return new InstanceClass(this.router, this.getRouterConfig(), this.getControllerManager(), this.getAssertionManager(), this.getRoleResolverService());
   }
 
   /**
@@ -98,14 +98,21 @@ class RouterService {
   }
 
   /**
-   * @return {*}
+   * @return {ControllerManager}
    */
   getControllerManager() {
     return this.getServiceManager().get('ControllerManager');
   }
 
   /**
-   * @return {*}
+   * @return {AssertionManager}
+   */
+  getAssertionManager() {
+    return this.getServiceManager().get('AssertionManager');
+  }
+
+  /**
+   * @return {RoleResolverService}
    */
   getRoleResolverService() {
     return this.getServiceManager().get('RoleResolverService');

@@ -9,8 +9,8 @@ class MailService {
     this.transport = mailer.createTransport(transportOptions);
     this.baseApi = baseApi;
 
-    this.registerMessage = 'Registration on the MySchoolPublisher';
-    this.forgotPasswordMessage = 'MySchoolPublisher: Password Recovering';
+    this.registerMessage = 'Registration on the KoaApp';
+    this.forgotPasswordMessage = 'KoaApp: Password Recovering';
   }
 
 
@@ -48,7 +48,7 @@ class MailService {
       name: this.forgotPasswordMessage,
       html: `
         Hello,<br>
-        In order to recover your password on the Myschoolpulbisher.com please follow the <a href="${forgotPasswordHref}">link</a>.<br>
+        In order to recover your password on the KoaApp please follow the <a href="${forgotPasswordHref}">link</a>.<br>
         Thank you.
       `,
     };

@@ -1,4 +1,5 @@
 
+
 const { Op } = require('sequelize');
 
 class BaseRepository {

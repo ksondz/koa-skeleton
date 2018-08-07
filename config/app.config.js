@@ -47,6 +47,16 @@ module.exports.router = {
 };
 
 /**
+ * @type {{secret: string, options: {expiresIn: string}}}
+ */
+module.exports.jwt = {
+  secret: process.env.JWT_SECRET,
+  options: {
+    expiresIn: process.env.JWT_EXP,
+  },
+};
+
+/**
  * Mail params
  *
  * @type {{transport: {options: {service: string, auth: {user: string, pass: string}}}}}
@@ -62,8 +72,3 @@ module.exports.mail = {
     },
   },
 };
-
-/**
- * @type {string}
- */
-module.exports.modulePath = `${__dirname}/../module`;

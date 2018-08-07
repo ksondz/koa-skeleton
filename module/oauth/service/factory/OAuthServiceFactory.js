@@ -17,16 +17,22 @@ class OAuthServiceFactory extends FactoryInterface {
 
     super(serviceManager);
 
-    const errorService = this.getServiceManager().get('ErrorService');
-    const modelService = this.getServiceManager().get('ModelService');
-    const cryptoService = this.getServiceManager().get('CryptoService');
+    return new OAuthService(
+      serviceManager.get('ErrorService'),
+      serviceManager.get('ModelService'),
+      serviceManager.get('CryptoService'),
+      this.getJWTConfig().secret,
+      this.getJWTConfig().options,
+      moment,
+    );
+  }
 
-    const secret = process.env.JWT_SECRET;
-    const options = {
-      expiresIn: process.env.JWT_EXP,
-    };
 
-    return new OAuthService(errorService, modelService, cryptoService, secret, options, moment);
+  /**
+   * @return {{secret: string, options: {expiresIn: string}}}
+   */
+  getJWTConfig() {
+    return this.getConfig().jwt;
   }
 }
 

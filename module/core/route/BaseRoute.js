@@ -7,13 +7,15 @@ class BaseRoute {
    * @param router
    * @param routerConfig
    * @param controllerManager
+   * @param assertionManager
    * @param roleResolverService
    */
-  constructor(router, routerConfig, controllerManager, roleResolverService) {
+  constructor(router, routerConfig, controllerManager, assertionManager, roleResolverService) {
     this.router = router;
     this.routerConfig = routerConfig;
 
     this.controllerManager = controllerManager;
+    this.assertionManager = assertionManager;
     this.roleResolverService = roleResolverService;
   }
 
@@ -59,10 +61,17 @@ class BaseRoute {
   }
 
   /**
-   * @return {controllerManager}
+   * @return {ControllerManager}
    */
   getControllerManager() {
     return this.controllerManager;
+  }
+
+  /**
+   * @return {AssertionManager}
+   */
+  getAssertionManager() {
+    return this.assertionManager;
   }
 
   /**

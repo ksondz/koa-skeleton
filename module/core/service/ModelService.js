@@ -82,14 +82,14 @@ class ModelService {
   }
 
   /**
-   * @param callback
+   * @param execute
    * @return {Promise<*>}
    */
-  async runTransaction(callback) {
+  async runTransaction(execute) {
     const transaction = await this.getSequelize().transaction();
 
     try {
-      const result = await callback();
+      const result = await execute();
 
       await transaction.commit();
 
