@@ -4,6 +4,7 @@ const BaseResponse = require('./BaseResponse');
 
 class NotFoundResponse extends BaseResponse {
 
+
   /**
    * @param message
    */

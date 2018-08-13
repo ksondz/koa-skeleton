@@ -26,11 +26,11 @@ class ModelService {
    * @return {*}
    */
   get(name) {
-    if (!this.getModels()[name]) {
+    if (!this.models[name]) {
       return new TypeError(`Model with name ${name} does not exist`);
     }
 
-    return this.getModels()[name];
+    return this.models[name];
   }
 
   /**
@@ -86,7 +86,7 @@ class ModelService {
    * @return {Promise<*>}
    */
   async runTransaction(execute) {
-    const transaction = await this.getSequelize().transaction();
+    const transaction = await this.sequelize.transaction();
 
     try {
       const result = await execute();
@@ -106,13 +106,6 @@ class ModelService {
    */
   getSequelize() {
     return this.sequelize;
-  }
-
-  /**
-   * @return {{}|*|Array}
-   */
-  getModels() {
-    return this.models;
   }
 }
 

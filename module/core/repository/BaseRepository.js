@@ -29,6 +29,7 @@ class BaseRepository {
     this.model = model;
   }
 
+
   /**
    * @param data
    * @returns {Promise<*|null>}

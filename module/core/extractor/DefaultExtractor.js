@@ -51,7 +51,6 @@ class DefaultExtractor {
    * @returns {Promise<Array>}
    */
   async extractArray(items, properties = [], associations = []) {
-
     const extractedData = [];
 
     items = items || [];
@@ -86,7 +85,6 @@ class DefaultExtractor {
    * @return {{}}
    */
   async extract(resource, properties = [], associations = []) {
-
     const resourceExtractor = this.getResourceExtractor(resource);
 
     if ((resourceExtractor !== this) || !properties.length) {
@@ -130,7 +128,6 @@ class DefaultExtractor {
     return Object.prototype.hasOwnProperty.call(resource, propertyName) ? resource[propertyName] : this.defaultUndefinedPropertyValue;
   }
 
-
   /**
    *
    * @param resource
@@ -138,7 +135,6 @@ class DefaultExtractor {
    * @returns {Promise<{}>}
    */
   async extractResourceAssociations(resource, associations = []) {
-
     const extractedData = {};
 
     if (resource.dataValues) {
@@ -150,14 +146,12 @@ class DefaultExtractor {
     return extractedData;
   }
 
-
   /**
    * @param resource
    * @param associationName
    * @returns {Promise<*>}
    */
   async getResourceAssociationValue(resource, associationName) {
-
     const getterMethod = `get${associationName.charAt(0).toUpperCase() + associationName.slice(1)}`;
 
     let associationValue = await resource[getterMethod]();
@@ -175,13 +169,11 @@ class DefaultExtractor {
     return associationValue;
   }
 
-
   /**
    * @param resource
    * @returns {*}
    */
   getResourceExtractor(resource) {
-
     if (Object.prototype.hasOwnProperty.call(resource, '_modelOptions')) {
 
       const modelName = resource._modelOptions.name.singular;

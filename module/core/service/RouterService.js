@@ -48,7 +48,7 @@ class RouterService {
   getInstance(InstanceClass) {
 
     if (InstanceClass.prototype instanceof FactoryInterface) {
-      return new InstanceClass(this.getServiceManager());
+      return new InstanceClass(this.serviceManager);
     }
 
     return new InstanceClass(this.router, this.getRouterConfig(), this.getControllerManager(), this.getAssertionManager(), this.getRoleResolverService());
@@ -86,36 +86,29 @@ class RouterService {
   /**
    * @return {*}
    */
-  getServiceManager() {
-    return this.serviceManager;
-  }
-
-  /**
-   * @return {*}
-   */
   getConfig() {
-    return this.getServiceManager().get('Config');
+    return this.serviceManager.get('Config');
   }
 
   /**
    * @return {ControllerManager}
    */
   getControllerManager() {
-    return this.getServiceManager().get('ControllerManager');
+    return this.serviceManager.get('ControllerManager');
   }
 
   /**
    * @return {AssertionManager}
    */
   getAssertionManager() {
-    return this.getServiceManager().get('AssertionManager');
+    return this.serviceManager.get('AssertionManager');
   }
 
   /**
    * @return {RoleResolverService}
    */
   getRoleResolverService() {
-    return this.getServiceManager().get('RoleResolverService');
+    return this.serviceManager.get('RoleResolverService');
   }
 }
 

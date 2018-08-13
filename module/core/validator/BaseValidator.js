@@ -76,7 +76,7 @@ class BaseValidator {
         messages[key] = label !== key ? label : error.message.replace(/" "/, '').trim();
       });
 
-      throw this.getErrorService().createValidationError(messages);
+      throw this.errorService.createValidationError(messages);
     }
   }
 

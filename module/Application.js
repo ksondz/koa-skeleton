@@ -54,6 +54,7 @@ class Application {
    * Create new application instance and initialize modules configs
    */
   constructor() {
+
     this.app = new Koa();
 
     const moduleConfig = Application.getModuleConfigs();
@@ -67,7 +68,7 @@ class Application {
    * @return {Promise<void>}
    */
   async listen(port) {
-    await this.getApp().listen(port);
+    await this.app.listen(port);
   }
 
   /**
@@ -78,16 +79,19 @@ class Application {
     await this.getModelService().getSequelize().sync();
 
     // Top middleware is the error handler.
-    this.getApp().use(this.getErrorService().handleError);
+    this.app.use(this.getErrorService().handleError);
 
-    this.getApp().use(this.getRouterService().getCors());
-    this.getApp().use(this.getRouterService().getBodyParser());
+    const routerService = this.getRouterService();
 
-    this.getApp().use(this.getOAuthService().authorization);
+    this.app.use(routerService.getCors());
+    this.app.use(routerService.getBodyParser());
 
-    this.getApp().use(await this.getRouterService().getRoutes());
+    this.app.use(this.getOAuthService().authorization);
 
-    this.getApp().use(staticServer(this.getConfig().staticServer));
+    const routes = await routerService.getRoutes();
+    this.app.use(routes);
+
+    this.app.use(staticServer(this.getConfig().staticServer));
   }
 
   /**
